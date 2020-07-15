@@ -51,7 +51,7 @@ namespace Nop.Services.Tasks
             if (taskId == 0)
                 return null;
 
-            return _taskRepository.ToCachedGetById(taskId);
+            return _taskRepository.GetById(taskId);
         }
 
         /// <summary>

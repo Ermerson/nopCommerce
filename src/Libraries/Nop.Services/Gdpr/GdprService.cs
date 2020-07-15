@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Gdpr;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Authentication.External;
 using Nop.Services.Blogs;
@@ -31,7 +33,7 @@ namespace Nop.Services.Gdpr
         private readonly IAddressService _addressService;
         private readonly IBackInStockSubscriptionService _backInStockSubscriptionService;
         private readonly IBlogService _blogService;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICustomerService _customerService;
         private readonly IExternalAuthenticationService _externalAuthenticationService;
         private readonly IEventPublisher _eventPublisher;
@@ -52,7 +54,7 @@ namespace Nop.Services.Gdpr
         public GdprService(IAddressService addressService,
             IBackInStockSubscriptionService backInStockSubscriptionService,
             IBlogService blogService,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             ICustomerService customerService,
             IExternalAuthenticationService externalAuthenticationService,
             IEventPublisher eventPublisher,
@@ -100,7 +102,7 @@ namespace Nop.Services.Gdpr
             if (gdprConsentId == 0)
                 return null;
 
-            return _gdprConsentRepository.ToCachedGetById(gdprConsentId);
+            return _gdprConsentRepository.GetById(gdprConsentId);
         }
 
         /// <summary>

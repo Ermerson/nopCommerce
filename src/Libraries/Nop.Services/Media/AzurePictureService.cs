@@ -9,6 +9,7 @@ using Nop.Core.Caching;
 using Nop.Core.Configuration;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Media;
+using Nop.Core.Events;
 using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Services.Caching;
@@ -32,7 +33,7 @@ namespace Nop.Services.Media
         private static string _azureBlobStorageConnectionString;
         private static string _azureBlobStorageContainerName;
         private static string _azureBlobStorageEndPoint;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IStaticCacheManager _staticCacheManager;
         private readonly MediaSettings _mediaSettings;
         private readonly object _locker = new object();
@@ -43,7 +44,7 @@ namespace Nop.Services.Media
 
         public AzurePictureService(INopDataProvider dataProvider,
             IDownloadService downloadService,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             IHttpContextAccessor httpContextAccessor,
             INopFileProvider fileProvider,

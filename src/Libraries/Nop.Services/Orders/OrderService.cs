@@ -9,9 +9,9 @@ using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Payments;
+using Nop.Core.Events;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Catalog;
 using Nop.Services.Events;
 using Nop.Services.Shipping;
@@ -88,7 +88,7 @@ namespace Nop.Services.Orders
             if (orderId == 0)
                 return null;
 
-            return _orderRepository.ToCachedGetById(orderId, _cachingSettings.ShortTermCacheTime);
+            return _orderRepository.GetById(orderId, cacheTime: _cachingSettings.ShortTermCacheTime);
         }
 
         /// <summary>
@@ -127,23 +127,7 @@ namespace Nop.Services.Orders
         /// <returns>Order</returns>
         public virtual IList<Order> GetOrdersByIds(int[] orderIds)
         {
-            if (orderIds == null || orderIds.Length == 0)
-                return new List<Order>();
-
-            var query = from o in _orderRepository.Table
-                        where orderIds.Contains(o.Id) && !o.Deleted
-                        select o;
-            var orders = query.ToList();
-            //sort by passed identifiers
-            var sortedOrders = new List<Order>();
-            foreach (var id in orderIds)
-            {
-                var order = orders.Find(x => x.Id == id);
-                if (order != null)
-                    sortedOrders.Add(order);
-            }
-
-            return sortedOrders;
+            return _orderRepository.GetByIds(orderIds);
         }
 
         /// <summary>
@@ -468,7 +452,7 @@ namespace Nop.Services.Orders
             if (orderItemId == 0)
                 return null;
 
-            return _orderItemRepository.ToCachedGetById(orderItemId, _cachingSettings.ShortTermCacheTime);
+            return _orderItemRepository.GetById(orderItemId, cacheTime: _cachingSettings.ShortTermCacheTime);
         }
 
         /// <summary>
@@ -935,7 +919,7 @@ namespace Nop.Services.Orders
             if (recurringPaymentId == 0)
                 return null;
 
-            return _recurringPaymentRepository.ToCachedGetById(recurringPaymentId);
+            return _recurringPaymentRepository.GetById(recurringPaymentId);
         }
 
         /// <summary>

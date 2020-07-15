@@ -3,8 +3,8 @@ using Nop.Core.Domain.Orders;
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Moq;
-using Nop.Data;
-using Nop.Services.Events;
+ using Nop.Core.Events;
+ using Nop.Data;
 using Nop.Services.Orders;
 using NUnit.Framework;
 
@@ -28,10 +28,10 @@ namespace Nop.Services.Tests.Orders
 
             var giftCardStore = new List<GiftCard>();
 
-            _giftCardRepository.Setup(r => r.Insert(It.IsAny<GiftCard>())).Callback((GiftCard gc) => giftCardStore.Add(gc));
+            _giftCardRepository.Setup(r => r.Insert(It.IsAny<GiftCard>(), It.IsAny<bool>())).Callback((GiftCard gc, bool publishEvent) => giftCardStore.Add(gc));
             _giftCardRepository.Setup(r => r.Table).Returns(giftCardStore.AsQueryable());
 
-            _giftCardRepository.Setup(r => r.GetById(It.IsAny<int>())).Returns((int id) => _giftCardRepository.Object.Table.FirstOrDefault(x => x.Id == id));
+            _giftCardRepository.Setup(r => r.GetById(It.IsAny<int>(), true, null)).Returns((int id, bool cache, int? cacheTime) => _giftCardRepository.Object.Table.FirstOrDefault(x => x.Id == id));
 
             _giftCardRepository.Object.Insert(
                 new GiftCard
@@ -52,7 +52,7 @@ namespace Nop.Services.Tests.Orders
 
             var giftCardUsageHistoryStore = new List<GiftCardUsageHistory>();
 
-            _giftCardUsageHistoryRepository.Setup(r => r.Insert(It.IsAny<GiftCardUsageHistory>())).Callback((GiftCardUsageHistory gcuh) => giftCardUsageHistoryStore.Add(gcuh));
+            _giftCardUsageHistoryRepository.Setup(r => r.Insert(It.IsAny<GiftCardUsageHistory>(), It.IsAny<bool>())).Callback((GiftCardUsageHistory gcuh, bool publishEvent) => giftCardUsageHistoryStore.Add(gcuh));
             _giftCardUsageHistoryRepository.Setup(r => r.Table).Returns(giftCardUsageHistoryStore.AsQueryable());
 
             _orderItemRepository = new Mock<IRepository<OrderItem>>();

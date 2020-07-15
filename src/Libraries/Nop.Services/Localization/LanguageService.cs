@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Localization;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
@@ -20,7 +21,7 @@ namespace Nop.Services.Localization
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<Language> _languageRepository;
         private readonly ISettingService _settingService;
@@ -32,7 +33,7 @@ namespace Nop.Services.Localization
 
         #region Ctor
 
-        public LanguageService(ICacheKeyService cacheKeyService,
+        public LanguageService(ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             IRepository<Language> languageRepository,
             ISettingService settingService,
@@ -125,7 +126,7 @@ namespace Nop.Services.Localization
             if (languageId == 0)
                 return null;
 
-            return _languageRepository.ToCachedGetById(languageId);
+            return _languageRepository.GetById(languageId);
         }
 
         /// <summary>

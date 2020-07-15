@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Orders;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
@@ -17,7 +19,7 @@ namespace Nop.Services.Orders
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<ReturnRequest> _returnRequestRepository;
         private readonly IRepository<ReturnRequestAction> _returnRequestActionRepository;
@@ -27,7 +29,7 @@ namespace Nop.Services.Orders
 
         #region Ctor
 
-        public ReturnRequestService(ICacheKeyService cacheKeyService,
+        public ReturnRequestService(ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             IRepository<ReturnRequest> returnRequestRepository,
             IRepository<ReturnRequestAction> returnRequestActionRepository,
@@ -157,7 +159,7 @@ namespace Nop.Services.Orders
             if (returnRequestActionId == 0)
                 return null;
 
-            return _returnRequestActionRepository.ToCachedGetById(returnRequestActionId);
+            return _returnRequestActionRepository.GetById(returnRequestActionId);
         }
 
         /// <summary>
@@ -258,7 +260,7 @@ namespace Nop.Services.Orders
             if (returnRequestReasonId == 0)
                 return null;
 
-            return _returnRequestReasonRepository.ToCachedGetById(returnRequestReasonId);
+            return _returnRequestReasonRepository.GetById(returnRequestReasonId);
         }
 
         /// <summary>

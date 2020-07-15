@@ -28,7 +28,7 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip
         #region Fields
 
         private readonly FixedOrByCountryStateZipTaxSettings _countryStateZipSettings;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICountryStateZipService _taxRateService;
         private readonly IGenericAttributeService _genericAttributeService;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -47,7 +47,7 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip
         #region Ctor
 
         public FixedOrByCountryStateZipTaxProvider(FixedOrByCountryStateZipTaxSettings countryStateZipSettings,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             ICountryStateZipService taxRateService,
             IGenericAttributeService genericAttributeService,
             IHttpContextAccessor httpContextAccessor,

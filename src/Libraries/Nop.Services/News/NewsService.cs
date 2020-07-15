@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.News;
 using Nop.Core.Domain.Stores;
+using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 
@@ -20,7 +21,7 @@ namespace Nop.Services.News
         #region Fields
 
         private readonly CatalogSettings _catalogSettings;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<NewsComment> _newsCommentRepository;
         private readonly IRepository<NewsItem> _newsItemRepository;
@@ -31,7 +32,7 @@ namespace Nop.Services.News
         #region Ctor
 
         public NewsService(CatalogSettings catalogSettings,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             IRepository<NewsComment> newsCommentRepository,
             IRepository<NewsItem> newsItemRepository,
@@ -76,7 +77,7 @@ namespace Nop.Services.News
             if (newsId == 0)
                 return null;
 
-            return _newsItemRepository.ToCachedGetById(newsId);
+            return _newsItemRepository.GetById(newsId);
         }
 
         /// <summary>
@@ -86,8 +87,7 @@ namespace Nop.Services.News
         /// <returns>News</returns>
         public virtual IList<NewsItem> GetNewsByIds(int[] newsIds)
         {
-            var query = _newsItemRepository.Table;
-            return query.Where(p => newsIds.Contains(p.Id)).ToList();
+            return _newsItemRepository.GetByIds(newsIds);
         }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace Nop.Services.News
             if (newsCommentId == 0)
                 return null;
 
-            return _newsCommentRepository.ToCachedGetById(newsCommentId);
+            return _newsCommentRepository.GetById(newsCommentId);
         }
 
         /// <summary>
@@ -253,23 +253,7 @@ namespace Nop.Services.News
         /// <returns>News comments</returns>
         public virtual IList<NewsComment> GetNewsCommentsByIds(int[] commentIds)
         {
-            if (commentIds == null || commentIds.Length == 0)
-                return new List<NewsComment>();
-
-            var query = from nc in _newsCommentRepository.Table
-                        where commentIds.Contains(nc.Id)
-                        select nc;
-            var comments = query.ToList();
-            //sort by passed identifiers
-            var sortedComments = new List<NewsComment>();
-            foreach (var id in commentIds)
-            {
-                var comment = comments.Find(x => x.Id == id);
-                if (comment != null)
-                    sortedComments.Add(comment);
-            }
-
-            return sortedComments;
+            return _newsCommentRepository.GetByIds(commentIds);
         }
 
         /// <summary>

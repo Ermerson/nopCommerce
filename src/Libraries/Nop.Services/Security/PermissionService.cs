@@ -5,6 +5,7 @@ using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Security;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
@@ -21,7 +22,7 @@ namespace Nop.Services.Security
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICustomerService _customerService;
         private readonly IEventPublisher _eventPublisher;
         private readonly ILocalizationService _localizationService;
@@ -34,7 +35,7 @@ namespace Nop.Services.Security
 
         #region Ctor
 
-        public PermissionService(ICacheKeyService cacheKeyService,
+        public PermissionService(ICacheKeyManager cacheKeyService,
             ICustomerService customerService,
             IEventPublisher eventPublisher,
             ILocalizationService localizationService,
@@ -105,7 +106,7 @@ namespace Nop.Services.Security
             if (permissionId == 0)
                 return null;
 
-            return _permissionRecordRepository.ToCachedGetById(permissionId);
+            return _permissionRecordRepository.GetById(permissionId);
         }
 
         /// <summary>

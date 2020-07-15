@@ -20,7 +20,7 @@ namespace Nop.Web.Areas.Admin.Factories
         #region Fields
 
         private readonly AdminAreaSettings _adminAreaSettings;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICommonModelFactory _commonModelFactory;
         private readonly ILogger _logger;
         private readonly IOrderModelFactory _orderModelFactory;
@@ -34,7 +34,7 @@ namespace Nop.Web.Areas.Admin.Factories
         #region Ctor
 
         public HomeModelFactory(AdminAreaSettings adminAreaSettings,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             ICommonModelFactory commonModelFactory,
             ILogger logger,
             IOrderModelFactory orderModelFactory,

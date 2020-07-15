@@ -4,8 +4,8 @@ using FluentAssertions;
 using Moq;
 using Nop.Data;
 using Nop.Core.Domain.Directory;
+using Nop.Core.Events;
 using Nop.Services.Directory;
-using Nop.Services.Events;
 using Nop.Tests;
 using NUnit.Framework;
 
@@ -94,17 +94,17 @@ namespace Nop.Services.Tests.Directory
 
             _measureDimensionRepository = new Mock<IRepository<MeasureDimension>>();
             _measureDimensionRepository.Setup(x => x.Table).Returns(new List<MeasureDimension> { measureDimension1, measureDimension2, measureDimension3, measureDimension4 }.AsQueryable());
-            _measureDimensionRepository.Setup(x => x.GetById(measureDimension1.Id)).Returns(measureDimension1);
-            _measureDimensionRepository.Setup(x => x.GetById(measureDimension2.Id)).Returns(measureDimension2);
-            _measureDimensionRepository.Setup(x => x.GetById(measureDimension3.Id)).Returns(measureDimension3);
-            _measureDimensionRepository.Setup(x => x.GetById(measureDimension4.Id)).Returns(measureDimension4);
+            _measureDimensionRepository.Setup(x => x.GetById(measureDimension1.Id, true, null)).Returns(measureDimension1);
+            _measureDimensionRepository.Setup(x => x.GetById(measureDimension2.Id, true, null)).Returns(measureDimension2);
+            _measureDimensionRepository.Setup(x => x.GetById(measureDimension3.Id, true, null)).Returns(measureDimension3);
+            _measureDimensionRepository.Setup(x => x.GetById(measureDimension4.Id, true, null)).Returns(measureDimension4);
 
             _measureWeightRepository = new Mock<IRepository<MeasureWeight>>();
             _measureWeightRepository.Setup(x => x.Table).Returns(new List<MeasureWeight> { measureWeight1, measureWeight2, measureWeight3, measureWeight4 }.AsQueryable());
-            _measureWeightRepository.Setup(x => x.GetById(measureWeight1.Id)).Returns(measureWeight1);
-            _measureWeightRepository.Setup(x => x.GetById(measureWeight2.Id)).Returns(measureWeight2);
-            _measureWeightRepository.Setup(x => x.GetById(measureWeight3.Id)).Returns(measureWeight3);
-            _measureWeightRepository.Setup(x => x.GetById(measureWeight4.Id)).Returns(measureWeight4);
+            _measureWeightRepository.Setup(x => x.GetById(measureWeight1.Id, true, null)).Returns(measureWeight1);
+            _measureWeightRepository.Setup(x => x.GetById(measureWeight2.Id, true, null)).Returns(measureWeight2);
+            _measureWeightRepository.Setup(x => x.GetById(measureWeight3.Id, true, null)).Returns(measureWeight3);
+            _measureWeightRepository.Setup(x => x.GetById(measureWeight4.Id, true, null)).Returns(measureWeight4);
 
             _measureSettings = new MeasureSettings
             {

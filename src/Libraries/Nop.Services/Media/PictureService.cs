@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Media;
+using Nop.Core.Events;
 using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Services.Caching.Extensions;
@@ -675,7 +676,7 @@ namespace Nop.Services.Media
             if (pictureId == 0)
                 return null;
 
-            return _pictureRepository.ToCachedGetById(pictureId);
+            return _pictureRepository.GetById(pictureId);
         }
 
         /// <summary>

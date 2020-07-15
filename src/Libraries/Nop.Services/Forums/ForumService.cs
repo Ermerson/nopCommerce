@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Forums;
 using Nop.Core.Domain.Seo;
+using Nop.Core.Events;
 using Nop.Core.Html;
 using Nop.Data;
 using Nop.Services.Caching;
@@ -25,7 +27,7 @@ namespace Nop.Services.Forums
         #region Fields
 
         private readonly ForumSettings _forumSettings;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICustomerService _customerService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IGenericAttributeService _genericAttributeService;
@@ -47,7 +49,7 @@ namespace Nop.Services.Forums
         #region Ctor
 
         public ForumService(ForumSettings forumSettings,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             ICustomerService customerService,
             IEventPublisher eventPublisher,
             IGenericAttributeService genericAttributeService,
@@ -263,7 +265,7 @@ namespace Nop.Services.Forums
                 return null;
             }
 
-            return _forumGroupRepository.ToCachedGetById(forumGroupId);
+            return _forumGroupRepository.GetById(forumGroupId);
         }
 
         /// <summary>
@@ -366,7 +368,7 @@ namespace Nop.Services.Forums
             if (forumId == 0)
                 return null;
 
-            return _forumRepository.ToCachedGetById(forumId);
+            return _forumRepository.GetById(forumId);
         }
 
         /// <summary>
@@ -480,7 +482,7 @@ namespace Nop.Services.Forums
             if (forumTopicId == 0)
                 return null;
 
-            var forumTopic = _forumTopicRepository.ToCachedGetById(forumTopicId);
+            var forumTopic = _forumTopicRepository.GetById(forumTopicId);
             if (forumTopic == null)
                 return null;
 
@@ -715,7 +717,7 @@ namespace Nop.Services.Forums
             if (forumPostId == 0)
                 return null;
 
-            return _forumPostRepository.ToCachedGetById(forumPostId);
+            return _forumPostRepository.GetById(forumPostId);
         }
 
         /// <summary>
@@ -873,7 +875,7 @@ namespace Nop.Services.Forums
             if (privateMessageId == 0)
                 return null;
 
-            return _forumPrivateMessageRepository.ToCachedGetById(privateMessageId);
+            return _forumPrivateMessageRepository.GetById(privateMessageId);
         }
 
         /// <summary>
@@ -1001,7 +1003,7 @@ namespace Nop.Services.Forums
             if (forumSubscriptionId == 0)
                 return null;
 
-            return _forumSubscriptionRepository.ToCachedGetById(forumSubscriptionId);
+            return _forumSubscriptionRepository.GetById(forumSubscriptionId);
         }
 
         /// <summary>

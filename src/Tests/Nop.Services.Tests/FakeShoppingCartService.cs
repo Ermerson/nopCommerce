@@ -5,6 +5,7 @@ using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Orders;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Catalog;
@@ -29,7 +30,7 @@ namespace Nop.Services.Tests
         public FakeShoppingCartService(CatalogSettings catalogSettings = null,
             IAclService aclService = null,
             IActionContextAccessor actionContextAccessor = null,  
-            ICacheKeyService cacheKeyService = null,
+            ICacheKeyManager cacheKeyService = null,
             ICheckoutAttributeParser checkoutAttributeParser = null,
             ICheckoutAttributeService checkoutAttributeService = null,
             ICurrencyService currencyService = null,

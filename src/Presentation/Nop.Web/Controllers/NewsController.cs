@@ -5,6 +5,7 @@ using Nop.Core;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.News;
 using Nop.Core.Domain.Security;
+using Nop.Core.Events;
 using Nop.Core.Rss;
 using Nop.Services.Customers;
 using Nop.Services.Events;

@@ -4,6 +4,7 @@ using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Seo;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Events;
 using Nop.Services.Localization;

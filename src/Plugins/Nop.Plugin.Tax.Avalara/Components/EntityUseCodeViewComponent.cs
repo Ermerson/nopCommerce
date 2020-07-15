@@ -33,7 +33,7 @@ namespace Nop.Plugin.Tax.Avalara.Components
         #region Fields
 
         private readonly AvalaraTaxManager _avalaraTaxManager;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICheckoutAttributeService _checkoutAttributeService;
         private readonly ICustomerService _customerService;
         private readonly IGenericAttributeService _genericAttributeService;
@@ -48,7 +48,7 @@ namespace Nop.Plugin.Tax.Avalara.Components
         #region Ctor
 
         public EntityUseCodeViewComponent(AvalaraTaxManager avalaraTaxManager,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             ICheckoutAttributeService checkoutAttributeService,
             ICustomerService customerService,
             IGenericAttributeService genericAttributeService,

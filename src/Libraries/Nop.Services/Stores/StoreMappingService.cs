@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Stores;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
@@ -19,7 +21,7 @@ namespace Nop.Services.Stores
         #region Fields
 
         private readonly CatalogSettings _catalogSettings;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<StoreMapping> _storeMappingRepository;
         private readonly IStoreContext _storeContext;
@@ -29,7 +31,7 @@ namespace Nop.Services.Stores
         #region Ctor
 
         public StoreMappingService(CatalogSettings catalogSettings,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             IRepository<StoreMapping> storeMappingRepository,
             IStoreContext storeContext)

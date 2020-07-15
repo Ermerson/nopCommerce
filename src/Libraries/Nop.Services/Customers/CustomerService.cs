@@ -10,6 +10,7 @@ using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Tax;
+using Nop.Core.Events;
 using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Services.Caching;
@@ -29,7 +30,7 @@ namespace Nop.Services.Customers
 
         private readonly CachingSettings _cachingSettings;
         private readonly CustomerSettings _customerSettings;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IGenericAttributeService _genericAttributeService;
         private readonly IRepository<Address> _customerAddressRepository;
@@ -50,7 +51,7 @@ namespace Nop.Services.Customers
 
         public CustomerService(CachingSettings cachingSettings,
             CustomerSettings customerSettings,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             IGenericAttributeService genericAttributeService,
             IRepository<Address> customerAddressRepository,
@@ -379,7 +380,7 @@ namespace Nop.Services.Customers
             if (customerId == 0)
                 return null;
 
-            return _customerRepository.ToCachedGetById(customerId, _cachingSettings.ShortTermCacheTime);
+            return _customerRepository.GetById(customerId, cacheTime: _cachingSettings.ShortTermCacheTime);
         }
 
         /// <summary>
@@ -1104,7 +1105,7 @@ namespace Nop.Services.Customers
             if (customerRoleId == 0)
                 return null;
 
-            return _customerRoleRepository.ToCachedGetById(customerRoleId);
+            return _customerRoleRepository.GetById(customerRoleId);
         }
 
         /// <summary>

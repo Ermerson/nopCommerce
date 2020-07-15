@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Directory;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
@@ -19,7 +21,7 @@ namespace Nop.Services.Directory
         #region Fields
 
         private readonly CurrencySettings _currencySettings;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IExchangeRatePluginManager _exchangeRatePluginManager;
         private readonly IRepository<Currency> _currencyRepository;
@@ -30,7 +32,7 @@ namespace Nop.Services.Directory
         #region Ctor
 
         public CurrencyService(CurrencySettings currencySettings,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             IExchangeRatePluginManager exchangeRatePluginManager,
             IRepository<Currency> currencyRepository,
@@ -75,7 +77,7 @@ namespace Nop.Services.Directory
             if (currencyId == 0)
                 return null;
             
-            return _currencyRepository.ToCachedGetById(currencyId);
+            return _currencyRepository.GetById(currencyId);
         }
 
         /// <summary>

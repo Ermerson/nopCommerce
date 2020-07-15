@@ -8,9 +8,9 @@ using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Orders;
+using Nop.Core.Events;
 using Nop.Services.Catalog;
 using Nop.Services.Directory;
-using Nop.Services.Events;
 using Nop.Services.Localization;
 using Nop.Services.Media;
 using Nop.Services.Tax;
@@ -157,28 +157,28 @@ namespace Nop.Services.Tests.Catalog
 
             _productAttributeRepo = new Mock<IRepository<ProductAttribute>>();
             _productAttributeRepo.Setup(x => x.Table).Returns(new List<ProductAttribute> { pa1, pa2, pa3, pa4 }.AsQueryable());
-            _productAttributeRepo.Setup(x => x.GetById(pa1.Id)).Returns(pa1);
-            _productAttributeRepo.Setup(x => x.GetById(pa2.Id)).Returns(pa2);
-            _productAttributeRepo.Setup(x => x.GetById(pa3.Id)).Returns(pa3);
-            _productAttributeRepo.Setup(x => x.GetById(pa4.Id)).Returns(pa4);
+            _productAttributeRepo.Setup(x => x.GetById(pa1.Id, true, null)).Returns(pa1);
+            _productAttributeRepo.Setup(x => x.GetById(pa2.Id, true, null)).Returns(pa2);
+            _productAttributeRepo.Setup(x => x.GetById(pa3.Id, true, null)).Returns(pa3);
+            _productAttributeRepo.Setup(x => x.GetById(pa4.Id, true, null)).Returns(pa4);
 
             _productAttributeMappingRepo = new Mock<IRepository<ProductAttributeMapping>>();
             _productAttributeMappingRepo.Setup(x => x.Table).Returns(new List<ProductAttributeMapping> { pam1_1, pam2_1, pam3_1, pam4_1 }.AsQueryable());
-            _productAttributeMappingRepo.Setup(x => x.GetById(pam1_1.Id)).Returns(pam1_1);
-            _productAttributeMappingRepo.Setup(x => x.GetById(pam2_1.Id)).Returns(pam2_1);
-            _productAttributeMappingRepo.Setup(x => x.GetById(pam3_1.Id)).Returns(pam3_1);
-            _productAttributeMappingRepo.Setup(x => x.GetById(pam4_1.Id)).Returns(pam4_1);
+            _productAttributeMappingRepo.Setup(x => x.GetById(pam1_1.Id, true, null)).Returns(pam1_1);
+            _productAttributeMappingRepo.Setup(x => x.GetById(pam2_1.Id, true, null)).Returns(pam2_1);
+            _productAttributeMappingRepo.Setup(x => x.GetById(pam3_1.Id, true, null)).Returns(pam3_1);
+            _productAttributeMappingRepo.Setup(x => x.GetById(pam4_1.Id, true, null)).Returns(pam4_1);
 
             _productAttributeCombinationRepo = new Mock<IRepository<ProductAttributeCombination>>();
             _productAttributeCombinationRepo.Setup(x => x.Table).Returns(new List<ProductAttributeCombination>().AsQueryable());
 
             _productAttributeValueRepo = new Mock<IRepository<ProductAttributeValue>>();
             _productAttributeValueRepo.Setup(x => x.Table).Returns(new List<ProductAttributeValue> { pav1_1, pav1_2, pav2_1, pav2_2, pav4_1 }.AsQueryable());
-            _productAttributeValueRepo.Setup(x => x.GetById(pav1_1.Id)).Returns(pav1_1);
-            _productAttributeValueRepo.Setup(x => x.GetById(pav1_2.Id)).Returns(pav1_2);
-            _productAttributeValueRepo.Setup(x => x.GetById(pav2_1.Id)).Returns(pav2_1);
-            _productAttributeValueRepo.Setup(x => x.GetById(pav2_2.Id)).Returns(pav2_2);
-            _productAttributeValueRepo.Setup(x => x.GetById(pav4_1.Id)).Returns(pav4_1);
+            _productAttributeValueRepo.Setup(x => x.GetById(pav1_1.Id, true, null)).Returns(pav1_1);
+            _productAttributeValueRepo.Setup(x => x.GetById(pav1_2.Id, true, null)).Returns(pav1_2);
+            _productAttributeValueRepo.Setup(x => x.GetById(pav2_1.Id, true, null)).Returns(pav2_1);
+            _productAttributeValueRepo.Setup(x => x.GetById(pav2_2.Id, true, null)).Returns(pav2_2);
+            _productAttributeValueRepo.Setup(x => x.GetById(pav4_1.Id, true, null)).Returns(pav4_1);
 
             _predefinedProductAttributeValueRepo = new Mock<IRepository<PredefinedProductAttributeValue>>();
 

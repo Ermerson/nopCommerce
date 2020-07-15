@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Catalog;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
@@ -16,7 +18,7 @@ namespace Nop.Services.Catalog
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<ManufacturerTemplate> _manufacturerTemplateRepository;
 
@@ -24,7 +26,7 @@ namespace Nop.Services.Catalog
 
         #region Ctor
 
-        public ManufacturerTemplateService(ICacheKeyService cacheKeyService,
+        public ManufacturerTemplateService(ICacheKeyManager cacheKeyService,
         IEventPublisher eventPublisher,
             IRepository<ManufacturerTemplate> manufacturerTemplateRepository)
         {
@@ -77,7 +79,7 @@ namespace Nop.Services.Catalog
             if (manufacturerTemplateId == 0)
                 return null;
 
-            return _manufacturerTemplateRepository.ToCachedGetById(manufacturerTemplateId);
+            return _manufacturerTemplateRepository.GetById(manufacturerTemplateId);
         }
 
         /// <summary>

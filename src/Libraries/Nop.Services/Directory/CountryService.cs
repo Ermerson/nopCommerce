@@ -7,8 +7,8 @@ using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Stores;
+using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 using Nop.Services.Localization;
@@ -23,7 +23,7 @@ namespace Nop.Services.Directory
         #region Fields
 
         private readonly CatalogSettings _catalogSettings;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IStaticCacheManager _staticCacheManager;
         private readonly IEventPublisher _eventPublisher;
         private readonly ILocalizationService _localizationService;
@@ -36,7 +36,7 @@ namespace Nop.Services.Directory
         #region Ctor
 
         public CountryService(CatalogSettings catalogSettings,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             IStaticCacheManager staticCacheManager,
             IEventPublisher eventPublisher,
             ILocalizationService localizationService,
@@ -161,7 +161,7 @@ namespace Nop.Services.Directory
             if (countryId == 0)
                 return null;
             
-            return _countryRepository.ToCachedGetById(countryId);
+            return _countryRepository.GetById(countryId);
         }
 
         /// <summary>
@@ -171,23 +171,7 @@ namespace Nop.Services.Directory
         /// <returns>Countries</returns>
         public virtual IList<Country> GetCountriesByIds(int[] countryIds)
         {
-            if (countryIds == null || countryIds.Length == 0)
-                return new List<Country>();
-
-            var query = from c in _countryRepository.Table
-                        where countryIds.Contains(c.Id)
-                        select c;
-            var countries = query.ToList();
-            //sort by passed identifiers
-            var sortedCountries = new List<Country>();
-            foreach (var id in countryIds)
-            {
-                var country = countries.Find(x => x.Id == id);
-                if (country != null)
-                    sortedCountries.Add(country);
-            }
-
-            return sortedCountries;
+            return _countryRepository.GetByIds(countryIds);
         }
 
         /// <summary>

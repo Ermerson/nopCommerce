@@ -28,7 +28,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
         #region Fields
 
         private readonly AvalaraTaxManager _avalaraTaxManager;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IGenericAttributeService _genericAttributeService;
         private readonly ILocalizationService _localizationService;
         private readonly INotificationService _notificationService;
@@ -42,7 +42,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
         #region Ctor
 
         public AvalaraTaxController(AvalaraTaxManager avalaraTaxManager,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             IGenericAttributeService genericAttributeService,
             ILocalizationService localizationService,
             INotificationService notificationService,

@@ -34,7 +34,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Fields
 
         private readonly IAclService _aclService;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICategoryModelFactory _categoryModelFactory;
         private readonly ICategoryService _categoryService;
         private readonly ICustomerActivityService _customerActivityService;
@@ -59,7 +59,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Ctor
 
         public CategoryController(IAclService aclService,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             ICategoryModelFactory categoryModelFactory,
             ICategoryService categoryService,
             ICustomerActivityService customerActivityService,

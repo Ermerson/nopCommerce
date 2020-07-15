@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core.Domain.Blogs;
+using Nop.Core.Events;
 using Nop.Services.Blogs;
 using Nop.Services.Events;
 using Nop.Services.Localization;

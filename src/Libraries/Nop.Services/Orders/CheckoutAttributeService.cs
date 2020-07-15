@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Orders;
+using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 using Nop.Services.Stores;
@@ -18,7 +18,7 @@ namespace Nop.Services.Orders
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IStaticCacheManager _staticCacheManager;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<CheckoutAttribute> _checkoutAttributeRepository;
@@ -29,7 +29,7 @@ namespace Nop.Services.Orders
 
         #region Ctor
 
-        public CheckoutAttributeService(ICacheKeyService cacheKeyService,
+        public CheckoutAttributeService(ICacheKeyManager cacheKeyService,
             IStaticCacheManager staticCacheManager,
             IEventPublisher eventPublisher,
             IRepository<CheckoutAttribute> checkoutAttributeRepository,
@@ -123,7 +123,7 @@ namespace Nop.Services.Orders
             if (checkoutAttributeId == 0)
                 return null;
 
-            return _checkoutAttributeRepository.ToCachedGetById(checkoutAttributeId);
+            return _checkoutAttributeRepository.GetById(checkoutAttributeId);
         }
 
         /// <summary>
@@ -133,14 +133,7 @@ namespace Nop.Services.Orders
         /// <returns>Checkout attributes</returns>
         public virtual IList<CheckoutAttribute> GetCheckoutAttributeByIds(int[] checkoutAttributeIds)
         {
-            if (checkoutAttributeIds == null || checkoutAttributeIds.Length == 0)
-                return new List<CheckoutAttribute>();
-
-            var query = from p in _checkoutAttributeRepository.Table
-                        where checkoutAttributeIds.Contains(p.Id)
-                        select p;
-
-            return query.ToList();
+            return _checkoutAttributeRepository.GetByIds(checkoutAttributeIds);
         }
 
         /// <summary>
@@ -220,7 +213,7 @@ namespace Nop.Services.Orders
             if (checkoutAttributeValueId == 0)
                 return null;
 
-            return _checkoutAttributeValueRepository.ToCachedGetById(checkoutAttributeValueId);
+            return _checkoutAttributeValueRepository.GetById(checkoutAttributeValueId);
         }
 
         /// <summary>

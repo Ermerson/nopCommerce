@@ -3,6 +3,7 @@ using System.Linq;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Common;
@@ -151,7 +152,7 @@ namespace Nop.Services.Catalog
             if (subscriptionId == 0)
                 return null;
 
-            var subscription = _backInStockSubscriptionRepository.ToCachedGetById(subscriptionId);
+            var subscription = _backInStockSubscriptionRepository.GetById(subscriptionId);
             return subscription;
         }
 

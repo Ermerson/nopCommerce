@@ -23,7 +23,7 @@ namespace Nop.Services.Catalog
 
         private readonly CatalogSettings _catalogSettings;
         private readonly CurrencySettings _currencySettings;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICategoryService _categoryService;
         private readonly ICurrencyService _currencyService;
         private readonly ICustomerService _customerService;
@@ -41,7 +41,7 @@ namespace Nop.Services.Catalog
 
         public PriceCalculationService(CatalogSettings catalogSettings,
             CurrencySettings currencySettings,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             ICategoryService categoryService,
             ICurrencyService currencyService,
             ICustomerService customerService,

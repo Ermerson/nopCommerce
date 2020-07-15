@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Tax;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
@@ -16,7 +18,7 @@ namespace Nop.Services.Tax
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<TaxCategory> _taxCategoryRepository;
 
@@ -24,7 +26,7 @@ namespace Nop.Services.Tax
 
         #region Ctor
 
-        public TaxCategoryService(ICacheKeyService cacheKeyService,
+        public TaxCategoryService(ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             IRepository<TaxCategory> taxCategoryRepository)
         {
@@ -77,7 +79,7 @@ namespace Nop.Services.Tax
             if (taxCategoryId == 0)
                 return null;
 
-            return _taxCategoryRepository.ToCachedGetById(taxCategoryId);
+            return _taxCategoryRepository.GetById(taxCategoryId);
         }
 
         /// <summary>

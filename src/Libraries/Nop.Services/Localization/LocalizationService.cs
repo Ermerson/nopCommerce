@@ -11,11 +11,10 @@ using Nop.Core.Caching;
 using Nop.Core.Configuration;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Security;
+using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Configuration;
-using Nop.Services.Events;
 using Nop.Services.Logging;
 using Nop.Services.Plugins;
 
@@ -28,7 +27,7 @@ namespace Nop.Services.Localization
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly ILanguageService _languageService;
         private readonly ILocalizedEntityService _localizedEntityService;
@@ -43,7 +42,7 @@ namespace Nop.Services.Localization
 
         #region Ctor
 
-        public LocalizationService(ICacheKeyService cacheKeyService,
+        public LocalizationService(ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             ILanguageService languageService,
             ILocalizedEntityService localizedEntityService,
@@ -193,7 +192,7 @@ namespace Nop.Services.Localization
             if (localeStringResourceId == 0)
                 return null;
 
-            return _lsrRepository.ToCachedGetById(localeStringResourceId);
+            return _lsrRepository.GetById(localeStringResourceId);
         }
 
         /// <summary>
@@ -461,7 +460,7 @@ namespace Nop.Services.Localization
             }
 
             _lsrRepository.Update(lrsToUpdateList);
-            _lsrRepository.Insert(lrsToInsertList.Values);
+            _lsrRepository.Insert(lrsToInsertList.Values.ToList());
 
             //clear cache
             _staticCacheManager.RemoveByPrefix(NopLocalizationDefaults.LocaleStringResourcesPrefixCacheKey);

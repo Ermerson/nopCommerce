@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Catalog;
+using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 
@@ -17,7 +18,7 @@ namespace Nop.Services.Catalog
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<Product> _productRepository;
         private readonly IRepository<ProductSpecificationAttribute> _productSpecificationAttributeRepository;
@@ -28,7 +29,7 @@ namespace Nop.Services.Catalog
 
         #region Ctor
 
-        public SpecificationAttributeService(ICacheKeyService cacheKeyService,
+        public SpecificationAttributeService(ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             IRepository<Product> productRepository,
             IRepository<ProductSpecificationAttribute> productSpecificationAttributeRepository,
@@ -59,7 +60,7 @@ namespace Nop.Services.Catalog
             if (specificationAttributeId == 0)
                 return null;
 
-            return _specificationAttributeRepository.ToCachedGetById(specificationAttributeId);
+            return _specificationAttributeRepository.GetById(specificationAttributeId);
         }
 
         /// <summary>
@@ -69,14 +70,7 @@ namespace Nop.Services.Catalog
         /// <returns>Specification attributes</returns>
         public virtual IList<SpecificationAttribute> GetSpecificationAttributeByIds(int[] specificationAttributeIds)
         {
-            if (specificationAttributeIds == null || specificationAttributeIds.Length == 0)
-                return new List<SpecificationAttribute>();
-
-            var query = from p in _specificationAttributeRepository.Table
-                        where specificationAttributeIds.Contains(p.Id)
-                        select p;
-
-            return query.ToList();
+            return _specificationAttributeRepository.GetByIds(specificationAttributeIds);
         }
 
         /// <summary>
@@ -181,7 +175,7 @@ namespace Nop.Services.Catalog
             if (specificationAttributeOptionId == 0)
                 return null;
 
-            return _specificationAttributeOptionRepository.ToCachedGetById(specificationAttributeOptionId);
+            return _specificationAttributeOptionRepository.GetById(specificationAttributeOptionId);
         }
 
         /// <summary>
@@ -191,23 +185,7 @@ namespace Nop.Services.Catalog
         /// <returns>Specification attribute options</returns>
         public virtual IList<SpecificationAttributeOption> GetSpecificationAttributeOptionsByIds(int[] specificationAttributeOptionIds)
         {
-            if (specificationAttributeOptionIds == null || specificationAttributeOptionIds.Length == 0)
-                return new List<SpecificationAttributeOption>();
-
-            var query = from sao in _specificationAttributeOptionRepository.Table
-                        where specificationAttributeOptionIds.Contains(sao.Id)
-                        select sao;
-            var specificationAttributeOptions = query.ToList();
-            //sort by passed identifiers
-            var sortedSpecificationAttributeOptions = new List<SpecificationAttributeOption>();
-            foreach (var id in specificationAttributeOptionIds)
-            {
-                var sao = specificationAttributeOptions.Find(x => x.Id == id);
-                if (sao != null)
-                    sortedSpecificationAttributeOptions.Add(sao);
-            }
-
-            return sortedSpecificationAttributeOptions;
+            return _specificationAttributeOptionRepository.GetByIds(specificationAttributeOptionIds);
         }
 
         /// <summary>

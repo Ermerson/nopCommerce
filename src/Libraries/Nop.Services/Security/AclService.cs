@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Security;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
@@ -21,7 +23,7 @@ namespace Nop.Services.Security
         #region Fields
 
         private readonly CatalogSettings _catalogSettings;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICustomerService _customerService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<AclRecord> _aclRecordRepository;
@@ -32,7 +34,7 @@ namespace Nop.Services.Security
         #region Ctor
 
         public AclService(CatalogSettings catalogSettings,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             ICustomerService customerService,
             IEventPublisher eventPublisher,
             IRepository<AclRecord> aclRecordRepository,
@@ -75,7 +77,7 @@ namespace Nop.Services.Security
             if (aclRecordId == 0)
                 return null;
 
-            return _aclRecordRepository.ToCachedGetById(aclRecordId);
+            return _aclRecordRepository.GetById(aclRecordId);
         }
 
         /// <summary>

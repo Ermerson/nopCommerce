@@ -30,7 +30,7 @@ namespace Nop.Web.Factories
         private readonly CaptchaSettings _captchaSettings;
         private readonly CustomerSettings _customerSettings;
         private readonly IBlogService _blogService;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICustomerService _customerService;
         private readonly IDateTimeHelper _dateTimeHelper;
         private readonly IGenericAttributeService _genericAttributeService;
@@ -49,7 +49,7 @@ namespace Nop.Web.Factories
             CaptchaSettings captchaSettings,
             CustomerSettings customerSettings,
             IBlogService blogService,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             ICustomerService customerService,
             IDateTimeHelper dateTimeHelper,
             IGenericAttributeService genericAttributeService,

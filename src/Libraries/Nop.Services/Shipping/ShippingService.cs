@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Shipping;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
@@ -30,7 +32,7 @@ namespace Nop.Services.Shipping
         #region Fields
 
         private readonly IAddressService _addressService;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICheckoutAttributeParser _checkoutAttributeParser;
         private readonly ICountryService _countryService;
         private readonly ICustomerService _customerService;
@@ -56,7 +58,7 @@ namespace Nop.Services.Shipping
         #region Ctor
 
         public ShippingService(IAddressService addressService,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             ICheckoutAttributeParser checkoutAttributeParser,
             ICountryService countryService,
             ICustomerService customerService,
@@ -170,7 +172,7 @@ namespace Nop.Services.Shipping
             if (shippingMethodId == 0)
                 return null;
 
-            return _shippingMethodRepository.ToCachedGetById(shippingMethodId);
+            return _shippingMethodRepository.GetById(shippingMethodId);
         }
 
         /// <summary>
@@ -327,7 +329,7 @@ namespace Nop.Services.Shipping
             if (warehouseId == 0)
                 return null;
 
-            return _warehouseRepository.ToCachedGetById(warehouseId);
+            return _warehouseRepository.GetById(warehouseId);
         }
 
         /// <summary>

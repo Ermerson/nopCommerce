@@ -25,7 +25,7 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Services
 
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IRepository<ShippingByWeightByTotalRecord> _sbwtRepository;
         private readonly IStaticCacheManager _staticCacheManager;
 
@@ -33,7 +33,7 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Services
 
         #region Ctor
 
-        public ShippingByWeightByTotalService(ICacheKeyService cacheKeyService,
+        public ShippingByWeightByTotalService(ICacheKeyManager cacheKeyService,
             IRepository<ShippingByWeightByTotalRecord> sbwtRepository,
             IStaticCacheManager staticCacheManager)
         {

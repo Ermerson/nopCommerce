@@ -7,6 +7,7 @@ using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Security;
 using Nop.Core.Domain.Stores;
 using Nop.Core.Domain.Topics;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
@@ -26,7 +27,7 @@ namespace Nop.Services.Topics
 
         private readonly CatalogSettings _catalogSettings;
         private readonly IAclService _aclService;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICustomerService _customerService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<AclRecord> _aclRepository;
@@ -42,7 +43,7 @@ namespace Nop.Services.Topics
 
         public TopicService(CatalogSettings catalogSettings,
             IAclService aclService,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             ICustomerService customerService,
             IEventPublisher eventPublisher,
             IRepository<AclRecord> aclRepository,
@@ -94,7 +95,7 @@ namespace Nop.Services.Topics
             if (topicId == 0)
                 return null;
 
-            return _topicRepository.ToCachedGetById(topicId);
+            return _topicRepository.GetById(topicId);
         }
 
         /// <summary>

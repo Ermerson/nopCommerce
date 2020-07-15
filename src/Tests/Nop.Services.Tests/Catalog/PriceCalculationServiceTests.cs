@@ -72,9 +72,9 @@ namespace Nop.Services.Tests.Catalog
             _customerCustomerRoleMappingRepository.Setup(r => r.Table)
                 .Returns(customerCustomerRoleMapping.AsQueryable());
 
-            _customerCustomerRoleMappingRepository.Setup(r => r.Insert(It.IsAny<CustomerCustomerRoleMapping>()))
+            _customerCustomerRoleMappingRepository.Setup(r => r.Insert(It.IsAny<CustomerCustomerRoleMapping>(), It.IsAny<bool>()))
                 .Callback(
-                    (CustomerCustomerRoleMapping ccrm) => { customerCustomerRoleMapping.Add(ccrm); });
+                    (CustomerCustomerRoleMapping ccrm, bool publishEvent) => { customerCustomerRoleMapping.Add(ccrm); });
 
             _customerService = new CustomerService(new CachingSettings(), null, new FakeCacheKeyService(),  null, null, null, null,
                 null, _customerCustomerRoleMappingRepository.Object, null, _customerRoleRepository.Object, null, null,
@@ -84,8 +84,8 @@ namespace Nop.Services.Tests.Catalog
 
             _productRepository = new Mock<IRepository<Product>>();
             _productRepository.Setup(p => p.Table).Returns(GetMockProducts);
-            _productRepository.Setup(p => p.GetById(It.IsAny<int>()))
-                .Returns((int id) => GetMockProducts().FirstOrDefault(p => p.Id == id));
+            _productRepository.Setup(p => p.GetById(It.IsAny<int>(), true, null))
+                .Returns((int id, bool cache, int? cacheTime) => GetMockProducts().FirstOrDefault(p => p.Id == id));
 
             _tierPriceRepository = new Mock<IRepository<TierPrice>>();
             _tierPriceRepository.Setup(t => t.Table).Returns(GetMockTierPrices);

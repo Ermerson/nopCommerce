@@ -8,12 +8,11 @@ using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Discounts;
 using Nop.Core.Domain.Security;
 using Nop.Core.Domain.Stores;
+using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Customers;
 using Nop.Services.Discounts;
-using Nop.Services.Events;
 using Nop.Services.Localization;
 using Nop.Services.Security;
 using Nop.Services.Stores;
@@ -29,7 +28,7 @@ namespace Nop.Services.Catalog
 
         private readonly CatalogSettings _catalogSettings;
         private readonly IAclService _aclService;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICustomerService _customerService;
         private readonly IEventPublisher _eventPublisher;
         private readonly ILocalizationService _localizationService;
@@ -50,7 +49,7 @@ namespace Nop.Services.Catalog
 
         public CategoryService(CatalogSettings catalogSettings,
             IAclService aclService,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             ICustomerService customerService,
             IEventPublisher eventPublisher,
             ILocalizationService localizationService,
@@ -101,7 +100,7 @@ namespace Nop.Services.Catalog
             if (!mappings.Any())
                 return;
 
-            _discountCategoryMappingRepository.Delete(mappings);
+            _discountCategoryMappingRepository.Delete(mappings.ToList());
         }
 
         /// <summary>
@@ -405,7 +404,7 @@ namespace Nop.Services.Catalog
             if (categoryId == 0)
                 return null;
 
-            return _categoryRepository.ToCachedGetById(categoryId);
+            return _categoryRepository.GetById(categoryId);
         }
 
         /// <summary>
@@ -671,7 +670,7 @@ namespace Nop.Services.Catalog
             if (productCategoryId == 0)
                 return null;
 
-            return _productCategoryRepository.ToCachedGetById(productCategoryId);
+            return _productCategoryRepository.GetById(productCategoryId);
         }
 
         /// <summary>
@@ -751,16 +750,9 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="categoryIds">Category identifiers</param>
         /// <returns>Categories</returns>
-        public virtual List<Category> GetCategoriesByIds(int[] categoryIds)
+        public virtual IList<Category> GetCategoriesByIds(int[] categoryIds)
         {
-            if (categoryIds == null || categoryIds.Length == 0)
-                return new List<Category>();
-
-            var query = from p in _categoryRepository.Table
-                        where categoryIds.Contains(p.Id) && !p.Deleted
-                        select p;
-
-            return query.ToList();
+            return _categoryRepository.GetByIds(categoryIds);
         }
 
         /// <summary>

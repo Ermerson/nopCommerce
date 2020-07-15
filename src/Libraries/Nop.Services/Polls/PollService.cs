@@ -4,6 +4,7 @@ using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Polls;
 using Nop.Core.Domain.Stores;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
@@ -57,7 +58,7 @@ namespace Nop.Services.Polls
             if (pollId == 0)
                 return null;
 
-            return _pollRepository.ToCachedGetById(pollId);
+            return _pollRepository.GetById(pollId);
         }
 
         /// <summary>
@@ -181,7 +182,7 @@ namespace Nop.Services.Polls
             if (pollAnswerId == 0)
                 return null;
 
-            return _pollAnswerRepository.ToCachedGetById(pollAnswerId);
+            return _pollAnswerRepository.GetById(pollAnswerId);
         }
 
         /// <summary>

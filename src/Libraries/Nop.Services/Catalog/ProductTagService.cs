@@ -4,8 +4,8 @@ using System.Linq;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Catalog;
+using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Customers;
 using Nop.Services.Events;
@@ -21,7 +21,7 @@ namespace Nop.Services.Catalog
         #region Fields
 
         private readonly CatalogSettings _catalogSettings;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICustomerService _customerService;
         private readonly INopDataProvider _dataProvider;
         private readonly IEventPublisher _eventPublisher;
@@ -36,7 +36,7 @@ namespace Nop.Services.Catalog
         #region Ctor
 
         public ProductTagService(CatalogSettings catalogSettings,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             ICustomerService customerService,
             INopDataProvider dataProvider,
             IEventPublisher eventPublisher,
@@ -197,7 +197,7 @@ namespace Nop.Services.Catalog
             if (productTagId == 0)
                 return null;
 
-            return _productTagRepository.ToCachedGetById(productTagId);
+            return _productTagRepository.GetById(productTagId);
         }
 
         /// <summary>
@@ -207,14 +207,7 @@ namespace Nop.Services.Catalog
         /// <returns>Product tags</returns>
         public virtual IList<ProductTag> GetProductTagsByIds(int[] productTagIds)
         {
-            if (productTagIds == null || productTagIds.Length == 0)
-                return new List<ProductTag>();
-
-            var query = from p in _productTagRepository.Table
-                        where productTagIds.Contains(p.Id)
-                        select p;
-
-            return query.ToList();
+            return _productTagRepository.GetByIds(productTagIds);
         }
 
         /// <summary>

@@ -6,6 +6,7 @@ using Nop.Core.Caching;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Discounts;
 using Nop.Core.Domain.Orders;
+using Nop.Core.Events;
 using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Services.Caching;
@@ -25,7 +26,7 @@ namespace Nop.Services.Discounts
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICustomerService _customerService;
         private readonly IDiscountPluginManager _discountPluginManager;
         private readonly IEventPublisher _eventPublisher;
@@ -42,7 +43,7 @@ namespace Nop.Services.Discounts
 
         #region Ctor
 
-        public DiscountService(ICacheKeyService cacheKeyService,
+        public DiscountService(ICacheKeyManager cacheKeyService,
             ICustomerService customerService,
             IDiscountPluginManager discountPluginManager,
             IEventPublisher eventPublisher,
@@ -165,7 +166,7 @@ namespace Nop.Services.Discounts
             if (discountId == 0)
                 return null;
 
-            return _discountRepository.ToCachedGetById(discountId);
+            return _discountRepository.GetById(discountId);
         }
 
         /// <summary>
@@ -410,7 +411,7 @@ namespace Nop.Services.Discounts
             if (discountRequirementId == 0)
                 return null;
 
-            return _discountRequirementRepository.ToCachedGetById(discountRequirementId);
+            return _discountRequirementRepository.GetById(discountRequirementId);
         }
 
         /// <summary>

@@ -38,7 +38,7 @@ namespace Nop.Web.Areas.Admin.Factories
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICategoryService _categoryService;
         private readonly ICategoryTemplateService _categoryTemplateService;
         private readonly ICountryService _countryService;
@@ -66,7 +66,7 @@ namespace Nop.Web.Areas.Admin.Factories
 
         #region Ctor
 
-        public BaseAdminModelFactory(ICacheKeyService cacheKeyService,
+        public BaseAdminModelFactory(ICacheKeyManager cacheKeyService,
             ICategoryService categoryService,
             ICategoryTemplateService categoryTemplateService,
             ICountryService countryService,

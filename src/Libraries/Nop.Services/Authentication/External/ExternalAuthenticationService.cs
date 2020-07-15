@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Localization;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Common;
@@ -338,7 +339,7 @@ namespace Nop.Services.Authentication.External
             if (externalAuthenticationRecordId == 0)
                 return null;
 
-            return _externalAuthenticationRecordRepository.ToCachedGetById(externalAuthenticationRecordId);
+            return _externalAuthenticationRecordRepository.GetById(externalAuthenticationRecordId);
         }
 
         /// <summary>

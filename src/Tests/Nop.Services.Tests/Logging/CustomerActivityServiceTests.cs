@@ -6,6 +6,7 @@ using Nop.Core;
 using Nop.Data;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Logging;
+using Nop.Core.Events;
 using Nop.Services.Logging;
 using Nop.Tests;
 using NUnit.Framework;

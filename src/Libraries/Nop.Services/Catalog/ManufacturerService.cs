@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Discounts;
 using Nop.Core.Domain.Security;
 using Nop.Core.Domain.Stores;
+using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Customers;
 using Nop.Services.Discounts;
-using Nop.Services.Events;
 
 namespace Nop.Services.Catalog
 {
@@ -24,7 +24,7 @@ namespace Nop.Services.Catalog
         #region Fields
 
         private readonly CatalogSettings _catalogSettings;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICustomerService _customerService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<AclRecord> _aclRepository;
@@ -41,7 +41,7 @@ namespace Nop.Services.Catalog
         #region Ctor
 
         public ManufacturerService(CatalogSettings catalogSettings,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             ICustomerService customerService,
             IEventPublisher eventPublisher,
             IRepository<AclRecord> aclRepository,
@@ -85,7 +85,7 @@ namespace Nop.Services.Catalog
             if (!mappings.Any())
                 return;
 
-            _discountManufacturerMappingRepository.Delete(mappings);
+            _discountManufacturerMappingRepository.Delete(mappings.ToList());
         }
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace Nop.Services.Catalog
             if (manufacturerId == 0)
                 return null;
 
-            return _manufacturerRepository.ToCachedGetById(manufacturerId);
+            return _manufacturerRepository.GetById(manufacturerId);
         }
 
         /// <summary>
@@ -248,16 +248,9 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="manufacturerIds">manufacturer identifiers</param>
         /// <returns>Manufacturers</returns>
-        public virtual List<Manufacturer> GetManufacturersByIds(int[] manufacturerIds)
+        public virtual IList<Manufacturer> GetManufacturersByIds(int[] manufacturerIds)
         {
-            if (manufacturerIds == null || manufacturerIds.Length == 0)
-                return new List<Manufacturer>();
-
-            var query = from p in _manufacturerRepository.Table
-                        where manufacturerIds.Contains(p.Id) && !p.Deleted
-                        select p;
-
-            return query.ToList();
+            return _manufacturerRepository.GetByIds(manufacturerIds);
         }
 
         /// <summary>
@@ -472,7 +465,7 @@ namespace Nop.Services.Catalog
             if (productManufacturerId == 0)
                 return null;
 
-            return _productManufacturerRepository.ToCachedGetById(productManufacturerId);
+            return _productManufacturerRepository.GetById(productManufacturerId);
         }
 
         /// <summary>

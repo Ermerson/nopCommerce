@@ -6,6 +6,7 @@ using System.Reflection;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Localization;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
@@ -20,7 +21,7 @@ namespace Nop.Services.Localization
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<LocalizedProperty> _localizedPropertyRepository;
         private readonly IStaticCacheManager _staticCacheManager;
@@ -30,7 +31,7 @@ namespace Nop.Services.Localization
 
         #region Ctor
 
-        public LocalizedEntityService(ICacheKeyService cacheKeyService,
+        public LocalizedEntityService(ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             IRepository<LocalizedProperty> localizedPropertyRepository,
             IStaticCacheManager staticCacheManager,

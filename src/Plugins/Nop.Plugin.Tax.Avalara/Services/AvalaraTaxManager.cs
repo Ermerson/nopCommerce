@@ -38,7 +38,7 @@ namespace Nop.Plugin.Tax.Avalara.Services
         private readonly AvalaraTaxSettings _avalaraTaxSettings;
         private readonly IActionContextAccessor _actionContextAccessor;
         private readonly IAddressService _addressService;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICheckoutAttributeParser _checkoutAttributeParser;
         private readonly ICheckoutAttributeService _checkoutAttributeService;
         private readonly ICountryService _countryService;
@@ -78,7 +78,7 @@ namespace Nop.Plugin.Tax.Avalara.Services
         public AvalaraTaxManager(AvalaraTaxSettings avalaraTaxSettings,
             IActionContextAccessor actionContextAccessor,
             IAddressService addressService,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             ICheckoutAttributeParser checkoutAttributeParser,
             ICheckoutAttributeService checkoutAttributeService,
             ICountryService countryService,

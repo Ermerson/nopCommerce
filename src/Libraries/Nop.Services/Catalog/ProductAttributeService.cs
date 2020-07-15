@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Catalog;
+using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 
@@ -17,7 +18,7 @@ namespace Nop.Services.Catalog
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<PredefinedProductAttributeValue> _predefinedProductAttributeValueRepository;
         private readonly IRepository<ProductAttribute> _productAttributeRepository;
@@ -29,7 +30,7 @@ namespace Nop.Services.Catalog
 
         #region Ctor
 
-        public ProductAttributeService(ICacheKeyService cacheKeyService,
+        public ProductAttributeService(ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             IRepository<PredefinedProductAttributeValue> predefinedProductAttributeValueRepository,
             IRepository<ProductAttribute> productAttributeRepository,
@@ -110,7 +111,7 @@ namespace Nop.Services.Catalog
             if (productAttributeId == 0)
                 return null;
 
-            return _productAttributeRepository.ToCachedGetById(productAttributeId);
+            return _productAttributeRepository.GetById(productAttributeId);
         }
 
         /// <summary>
@@ -120,14 +121,7 @@ namespace Nop.Services.Catalog
         /// <returns>Product attributes </returns>
         public virtual IList<ProductAttribute> GetProductAttributeByIds(int[] productAttributeIds)
         {
-            if (productAttributeIds == null || productAttributeIds.Length == 0)
-                return new List<ProductAttribute>();
-
-            var query = from p in _productAttributeRepository.Table
-                        where productAttributeIds.Contains(p.Id)
-                        select p;
-
-            return query.ToList();
+            return _productAttributeRepository.GetByIds(productAttributeIds);
         }
 
         /// <summary>
@@ -224,7 +218,7 @@ namespace Nop.Services.Catalog
             if (productAttributeMappingId == 0)
                 return null;
 
-            return _productAttributeMappingRepository.ToCachedGetById(productAttributeMappingId);
+            return _productAttributeMappingRepository.GetById(productAttributeMappingId);
         }
 
         /// <summary>
@@ -304,7 +298,7 @@ namespace Nop.Services.Catalog
             if (productAttributeValueId == 0)
                 return null;
 
-            return _productAttributeValueRepository.ToCachedGetById(productAttributeValueId);
+            return _productAttributeValueRepository.GetById(productAttributeValueId);
         }
 
         /// <summary>
@@ -385,7 +379,7 @@ namespace Nop.Services.Catalog
             if (id == 0)
                 return null;
 
-            return _predefinedProductAttributeValueRepository.ToCachedGetById(id);
+            return _predefinedProductAttributeValueRepository.GetById(id);
         }
 
         /// <summary>
@@ -468,7 +462,7 @@ namespace Nop.Services.Catalog
             if (productAttributeCombinationId == 0)
                 return null;
 
-            return _productAttributeCombinationRepository.ToCachedGetById(productAttributeCombinationId);
+            return _productAttributeCombinationRepository.GetById(productAttributeCombinationId);
         }
 
         /// <summary>

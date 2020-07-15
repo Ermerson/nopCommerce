@@ -2,11 +2,10 @@
 using System.Linq;
 using Nop.Core;
 using Nop.Core.Caching;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Plugin.Tax.FixedOrByCountryStateZip.Domain;
 using Nop.Plugin.Tax.FixedOrByCountryStateZip.Infrastructure.Cache;
-using Nop.Services.Caching;
-using Nop.Services.Events;
 
 namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Services
 {
@@ -17,7 +16,7 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Services
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<TaxRate> _taxRateRepository;
         private readonly IStaticCacheManager _staticCacheManager;
@@ -33,7 +32,7 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Services
         /// <param name="eventPublisher">Event publisher</param>
         /// <param name="staticCacheManager">Cache manager</param>
         /// <param name="taxRateRepository">Tax rate repository</param>
-        public CountryStateZipService(ICacheKeyService cacheKeyService,
+        public CountryStateZipService(ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,            
             IRepository<TaxRate> taxRateRepository,
             IStaticCacheManager staticCacheManager)

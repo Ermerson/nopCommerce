@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Common;
+using Nop.Core.Events;
 using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Services.Caching;
@@ -124,7 +126,7 @@ namespace Nop.Services.Common
         {
             //we cannot inject ICacheKeyService into constructor because it'll cause circular references.
             //that's why we resolve it here this way
-            var key = EngineContext.Current.Resolve<ICacheKeyService>()
+            var key = EngineContext.Current.Resolve<ICacheKeyManager>()
                 .PrepareKeyForShortTermCache(NopCommonDefaults.GenericAttributeCacheKey, entityId, keyGroup);
             
             var query = from ga in _genericAttributeRepository.Table

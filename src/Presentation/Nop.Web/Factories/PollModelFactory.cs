@@ -18,7 +18,7 @@ namespace Nop.Web.Factories
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IPollService _pollService;
         private readonly IStaticCacheManager _staticCacheManager;
         private readonly IStoreContext _storeContext;
@@ -28,7 +28,7 @@ namespace Nop.Web.Factories
 
         #region Ctor
 
-        public PollModelFactory(ICacheKeyService cacheKeyService,
+        public PollModelFactory(ICacheKeyManager cacheKeyService,
             IPollService pollService,
             IStaticCacheManager staticCacheManager,
             IStoreContext storeContext,

@@ -159,23 +159,7 @@ namespace Nop.Services.Logging
         /// <returns>Log items</returns>
         public virtual IList<Log> GetLogByIds(int[] logIds)
         {
-            if (logIds == null || logIds.Length == 0)
-                return new List<Log>();
-
-            var query = from l in _logRepository.Table
-                        where logIds.Contains(l.Id)
-                        select l;
-            var logItems = query.ToList();
-            //sort by passed identifiers
-            var sortedLogItems = new List<Log>();
-            foreach (var id in logIds)
-            {
-                var log = logItems.Find(x => x.Id == id);
-                if (log != null)
-                    sortedLogItems.Add(log);
-            }
-
-            return sortedLogItems;
+            return _logRepository.GetByIds(logIds);
         }
 
         /// <summary>

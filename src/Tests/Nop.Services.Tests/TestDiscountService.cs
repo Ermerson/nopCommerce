@@ -9,6 +9,7 @@ using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Discounts;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Stores;
+using Nop.Core.Events;
 using Nop.Services.Caching;
 using Nop.Services.Catalog;
 using Nop.Services.Customers;
@@ -23,7 +24,7 @@ namespace Nop.Services.Tests
     {
         private readonly List<Discount> _discounts;
 
-        public TestDiscountService(ICacheKeyService cacheKeyService,
+        public TestDiscountService(ICacheKeyManager cacheKeyService,
             ICustomerService customerService,
             IDiscountPluginManager discountPluginManager,
             IEventPublisher eventPublisher,

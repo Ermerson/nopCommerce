@@ -18,7 +18,7 @@ namespace Nop.Web.Components
     {
         private readonly CatalogSettings _catalogSettings;
         private readonly IAclService _aclService;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IOrderReportService _orderReportService;
         private readonly IProductModelFactory _productModelFactory;
         private readonly IProductService _productService;
@@ -28,7 +28,7 @@ namespace Nop.Web.Components
 
         public HomepageBestSellersViewComponent(CatalogSettings catalogSettings,
             IAclService aclService,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             IOrderReportService orderReportService,
             IProductModelFactory productModelFactory,
             IProductService productService,

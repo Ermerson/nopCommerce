@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Common;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Directory;
@@ -112,7 +113,7 @@ namespace Nop.Services.Common
             if (addressId == 0)
                 return null;
             
-            return _addressRepository.ToCachedGetById(addressId, _cachingSettings.ShortTermCacheTime);
+            return _addressRepository.GetById(addressId, cacheTime: _cachingSettings.ShortTermCacheTime);
         }
 
         /// <summary>

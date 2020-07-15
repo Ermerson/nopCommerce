@@ -38,7 +38,7 @@ namespace Nop.Tests
             DiscountProductMappingRepository = new Mock<IRepository<DiscountProductMapping>>();
 
             PriceCalculationService = new PriceCalculationService(new CatalogSettings(), new CurrencySettings(),
-                new Mock<ICacheKeyService>().Object, new Mock<ICategoryService>().Object,
+                new Mock<ICacheKeyManager>().Object, new Mock<ICategoryService>().Object,
                 new Mock<ICurrencyService>().Object, new Mock<ICustomerService>().Object,
                 new Mock<IDiscountService>().Object, new Mock<IManufacturerService>().Object,
                 new Mock<IProductAttributeParser>().Object, new Mock<IProductService>().Object,
@@ -115,7 +115,7 @@ namespace Nop.Tests
             if (serviceType == typeof(IRepository<DiscountProductMapping>))
                 return DiscountProductMappingRepository.Object;
 
-            if (serviceType == typeof(ICacheKeyService))
+            if (serviceType == typeof(ICacheKeyManager))
                 return new FakeCacheKeyService();
 
             if (serviceType == typeof(ICustomerService))

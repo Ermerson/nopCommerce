@@ -1,8 +1,6 @@
-﻿using Nop.Core.Caching;
-
-namespace Nop.Services.Caching
+﻿namespace Nop.Core.Caching
 {
-    public partial interface ICacheKeyService
+    public partial interface ICacheKeyManager
     {
         /// <summary>
         /// Creates a copy of cache key and fills it by set parameters

@@ -32,7 +32,7 @@ namespace Nop.Web.Areas.Admin.Factories
         private readonly IAclSupportedModelFactory _aclSupportedModelFactory;
         private readonly IAuthenticationPluginManager _authenticationPluginManager;
         private readonly IBaseAdminModelFactory _baseAdminModelFactory;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ILocalizationService _localizationService;
         private readonly ILocalizedModelFactory _localizedModelFactory;
         private readonly IPaymentPluginManager _paymentPluginManager;
@@ -53,7 +53,7 @@ namespace Nop.Web.Areas.Admin.Factories
         public PluginModelFactory(IAclSupportedModelFactory aclSupportedModelFactory,
             IAuthenticationPluginManager authenticationPluginManager,
             IBaseAdminModelFactory baseAdminModelFactory,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             ILocalizationService localizationService,
             ILocalizedModelFactory localizedModelFactory,
             IPaymentPluginManager paymentPluginManager,

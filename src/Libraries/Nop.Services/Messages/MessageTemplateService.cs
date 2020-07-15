@@ -5,6 +5,7 @@ using Nop.Core.Caching;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.Stores;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
@@ -22,7 +23,7 @@ namespace Nop.Services.Messages
         #region Fields
 
         private readonly CatalogSettings _catalogSettings;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IStaticCacheManager _staticCacheManager;
         private readonly IEventPublisher _eventPublisher;
         private readonly ILanguageService _languageService;
@@ -37,7 +38,7 @@ namespace Nop.Services.Messages
         #region Ctor
 
         public MessageTemplateService(CatalogSettings catalogSettings,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             IStaticCacheManager staticCacheManager,
             IEventPublisher eventPublisher,
             ILanguageService languageService,
@@ -118,7 +119,7 @@ namespace Nop.Services.Messages
             if (messageTemplateId == 0)
                 return null;
 
-            return _messageTemplateRepository.ToCachedGetById(messageTemplateId);
+            return _messageTemplateRepository.GetById(messageTemplateId);
         }
 
         /// <summary>

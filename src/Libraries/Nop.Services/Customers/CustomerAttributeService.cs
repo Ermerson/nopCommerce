@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Customers;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
@@ -16,7 +18,7 @@ namespace Nop.Services.Customers
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<CustomerAttribute> _customerAttributeRepository;
         private readonly IRepository<CustomerAttributeValue> _customerAttributeValueRepository;
@@ -25,7 +27,7 @@ namespace Nop.Services.Customers
 
         #region Ctor
 
-        public CustomerAttributeService(ICacheKeyService cacheKeyService,
+        public CustomerAttributeService(ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             IRepository<CustomerAttribute> customerAttributeRepository,
             IRepository<CustomerAttributeValue> customerAttributeValueRepository)
@@ -78,7 +80,7 @@ namespace Nop.Services.Customers
             if (customerAttributeId == 0)
                 return null;
 
-            return _customerAttributeRepository.ToCachedGetById(customerAttributeId);
+            return _customerAttributeRepository.GetById(customerAttributeId);
         }
 
         /// <summary>
@@ -154,7 +156,7 @@ namespace Nop.Services.Customers
             if (customerAttributeValueId == 0)
                 return null;
 
-            return _customerAttributeValueRepository.ToCachedGetById(customerAttributeValueId);
+            return _customerAttributeValueRepository.GetById(customerAttributeValueId);
         }
 
         /// <summary>

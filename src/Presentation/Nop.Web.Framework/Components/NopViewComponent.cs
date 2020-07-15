@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
+using Nop.Core.Events;
 using Nop.Core.Infrastructure;
 using Nop.Services.Events;
 using Nop.Web.Framework.Events;

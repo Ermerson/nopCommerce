@@ -5,9 +5,9 @@ using FluentAssertions;
 using Moq;
 using Nop.Data;
 using Nop.Core.Domain.Directory;
+using Nop.Core.Events;
 using Nop.Services.Customers;
 using Nop.Services.Directory;
-using Nop.Services.Events;
 using Nop.Services.Stores;
 using Nop.Tests;
 using NUnit.Framework;
@@ -73,9 +73,9 @@ namespace Nop.Services.Tests.Directory
             };
             _currencyRepository = new Mock<IRepository<Currency>>();
             _currencyRepository.Setup(x => x.Table).Returns(new List<Currency> { _currencyUSD, _currencyEUR, _currencyRUR }.AsQueryable());
-            _currencyRepository.Setup(x => x.GetById(_currencyUSD.Id)).Returns(_currencyUSD);
-            _currencyRepository.Setup(x => x.GetById(_currencyEUR.Id)).Returns(_currencyEUR);
-            _currencyRepository.Setup(x => x.GetById(_currencyRUR.Id)).Returns(_currencyRUR);
+            _currencyRepository.Setup(x => x.GetById(_currencyUSD.Id, true, null)).Returns(_currencyUSD);
+            _currencyRepository.Setup(x => x.GetById(_currencyEUR.Id, true, null)).Returns(_currencyEUR);
+            _currencyRepository.Setup(x => x.GetById(_currencyRUR.Id, true, null)).Returns(_currencyRUR);
 
             _storeMappingService = new Mock<IStoreMappingService>();
 

@@ -6,6 +6,7 @@ using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Shipping;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
@@ -202,23 +203,7 @@ namespace Nop.Services.Shipping
         /// <returns>Shipments</returns>
         public virtual IList<Shipment> GetShipmentsByIds(int[] shipmentIds)
         {
-            if (shipmentIds == null || shipmentIds.Length == 0)
-                return new List<Shipment>();
-
-            var query = from o in _shipmentRepository.Table
-                        where shipmentIds.Contains(o.Id)
-                        select o;
-            var shipments = query.ToList();
-            //sort by passed identifiers
-            var sortedOrders = new List<Shipment>();
-            foreach (var id in shipmentIds)
-            {
-                var shipment = shipments.Find(x => x.Id == id);
-                if (shipment != null)
-                    sortedOrders.Add(shipment);
-            }
-
-            return sortedOrders;
+            return _shipmentRepository.GetByIds(shipmentIds);
         }
 
         /// <summary>
@@ -426,7 +411,7 @@ namespace Nop.Services.Shipping
         /// <returns>Shipment tracker</returns>
         public virtual IShipmentTracker GetShipmentTracker(Shipment shipment)
         {
-            var order = _orderRepository.ToCachedGetById(shipment.OrderId);
+            var order = _orderRepository.GetById(shipment.OrderId);
 
             if (!order.PickupInStore)
             {

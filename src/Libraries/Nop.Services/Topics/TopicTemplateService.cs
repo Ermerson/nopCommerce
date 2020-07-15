@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Topics;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
@@ -16,7 +18,7 @@ namespace Nop.Services.Topics
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<TopicTemplate> _topicTemplateRepository;
 
@@ -24,7 +26,7 @@ namespace Nop.Services.Topics
 
         #region Ctor
 
-        public TopicTemplateService(ICacheKeyService cacheKeyService,
+        public TopicTemplateService(ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             IRepository<TopicTemplate> topicTemplateRepository)
         {
@@ -77,7 +79,7 @@ namespace Nop.Services.Topics
             if (topicTemplateId == 0)
                 return null;
 
-            return _topicTemplateRepository.ToCachedGetById(topicTemplateId);
+            return _topicTemplateRepository.GetById(topicTemplateId);
         }
 
         /// <summary>

@@ -33,7 +33,7 @@ namespace Nop.Web.Framework.UI
         private readonly CachingSettings _cachingSettings;
         private readonly CommonSettings _commonSettings;
         private readonly IActionContextAccessor _actionContextAccessor;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly INopFileProvider _fileProvider;
         private readonly IStaticCacheManager _staticCacheManager;
@@ -60,7 +60,7 @@ namespace Nop.Web.Framework.UI
         public PageHeadBuilder(CachingSettings cachingSettings,
             CommonSettings commonSettings,
             IActionContextAccessor actionContextAccessor,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             IWebHostEnvironment webHostEnvironment,
             INopFileProvider fileProvider,
             IStaticCacheManager staticCacheManager,

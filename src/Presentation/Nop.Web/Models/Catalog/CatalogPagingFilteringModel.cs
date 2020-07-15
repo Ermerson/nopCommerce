@@ -376,7 +376,7 @@ namespace Nop.Web.Models.Catalog
             /// <param name="staticCacheManager">Cache manager</param>
             public virtual void PrepareSpecsFilters(IList<int> alreadyFilteredSpecOptionIds,
                 int[] filterableSpecificationAttributeOptionIds,
-                ICacheKeyService cacheKeyService,
+                ICacheKeyManager cacheKeyService,
                 ISpecificationAttributeService specificationAttributeService, ILocalizationService localizationService,
                 IWebHelper webHelper, IWorkContext workContext, IStaticCacheManager staticCacheManager)
             {

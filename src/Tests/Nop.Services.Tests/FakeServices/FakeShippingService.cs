@@ -1,7 +1,9 @@
 ﻿using Moq;
 using Nop.Core;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Shipping;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Catalog;
@@ -22,7 +24,7 @@ namespace Nop.Services.Tests.FakeServices
     {
         public FakeShippingService(
             IAddressService addressService = null,
-            ICacheKeyService cacheKeyService = null,
+            ICacheKeyManager cacheKeyService = null,
             ICheckoutAttributeParser checkoutAttributeParser = null,
             ICountryService countryService = null,
             ICustomerService customerSerice = null,

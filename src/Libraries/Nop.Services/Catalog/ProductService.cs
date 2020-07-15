@@ -12,9 +12,9 @@ using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Security;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Stores;
+using Nop.Core.Events;
 using Nop.Core.Infrastructure;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Customers;
 using Nop.Services.Events;
@@ -36,7 +36,7 @@ namespace Nop.Services.Catalog
         protected readonly CatalogSettings _catalogSettings;
         protected readonly CommonSettings _commonSettings;
         protected readonly IAclService _aclService;
-        protected readonly ICacheKeyService _cacheKeyService;
+        protected readonly ICacheKeyManager _cacheKeyService;
         protected readonly ICustomerService _customerService;
         protected readonly INopDataProvider _dataProvider;
         protected readonly IDateRangeService _dateRangeService;
@@ -75,7 +75,7 @@ namespace Nop.Services.Catalog
         public ProductService(CatalogSettings catalogSettings,
             CommonSettings commonSettings,
             IAclService aclService,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             ICustomerService customerService,
             INopDataProvider dataProvider,
             IDateRangeService dateRangeService,
@@ -375,7 +375,7 @@ namespace Nop.Services.Catalog
             if (productId == 0)
                 return null;
 
-            return _productRepository.ToCachedGetById(productId);
+            return _productRepository.GetById(productId);
         }
 
         /// <summary>
@@ -385,27 +385,7 @@ namespace Nop.Services.Catalog
         /// <returns>Products</returns>
         public virtual IList<Product> GetProductsByIds(int[] productIds)
         {
-            if (productIds == null || productIds.Length == 0)
-                return new List<Product>();
-
-            var key = _cacheKeyService.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductsByIdsCacheKey, productIds);
-
-            var query = from p in _productRepository.Table
-                        where productIds.Contains(p.Id) && !p.Deleted
-                        select p;
-
-            var products = query.ToCachedList(key);
-
-            //sort by passed identifiers
-            var sortedProducts = new List<Product>();
-            foreach (var id in productIds)
-            {
-                var product = products.FirstOrDefault(x => x.Id == id);
-                if (product != null)
-                    sortedProducts.Add(product);
-            }
-
-            return sortedProducts;
+            return _productRepository.GetByIds(productIds);
         }
 
         /// <summary>
@@ -1697,7 +1677,7 @@ namespace Nop.Services.Catalog
             if (pwi == null)
                 return 0;
 
-            var shipment = _shipmentRepository.ToCachedGetById(shipmentItem.ShipmentId);
+            var shipment = _shipmentRepository.GetById(shipmentItem.ShipmentId);
 
             //not shipped yet? hence "BookReservedInventory" method was not invoked
             if (!shipment.ShippedDateUtc.HasValue)
@@ -1766,7 +1746,7 @@ namespace Nop.Services.Catalog
             if (relatedProductId == 0)
                 return null;
 
-            return _relatedProductRepository.ToCachedGetById(relatedProductId);
+            return _relatedProductRepository.GetById(relatedProductId);
         }
 
         /// <summary>
@@ -1876,7 +1856,7 @@ namespace Nop.Services.Catalog
             if (crossSellProductId == 0)
                 return null;
 
-            return _crossSellProductRepository.ToCachedGetById(crossSellProductId);
+            return _crossSellProductRepository.GetById(crossSellProductId);
         }
 
         /// <summary>
@@ -2037,7 +2017,7 @@ namespace Nop.Services.Catalog
             if (tierPriceId == 0)
                 return null;
 
-            return _tierPriceRepository.ToCachedGetById(tierPriceId);
+            return _tierPriceRepository.GetById(tierPriceId);
         }
 
         /// <summary>
@@ -2139,7 +2119,7 @@ namespace Nop.Services.Catalog
             if (productPictureId == 0)
                 return null;
 
-            return _productPictureRepository.ToCachedGetById(productPictureId);
+            return _productPictureRepository.GetById(productPictureId);
         }
 
         /// <summary>
@@ -2292,7 +2272,7 @@ namespace Nop.Services.Catalog
             if (productReviewId == 0)
                 return null;
 
-            return _productReviewRepository.ToCachedGetById(productReviewId);
+            return _productReviewRepository.GetById(productReviewId);
         }
 
         /// <summary>
@@ -2302,23 +2282,7 @@ namespace Nop.Services.Catalog
         /// <returns>Product reviews</returns>
         public virtual IList<ProductReview> GetProducReviewsByIds(int[] productReviewIds)
         {
-            if (productReviewIds == null || productReviewIds.Length == 0)
-                return new List<ProductReview>();
-
-            var query = from pr in _productReviewRepository.Table
-                        where productReviewIds.Contains(pr.Id)
-                        select pr;
-            var productReviews = query.ToList();
-            //sort by passed identifiers
-            var sortedProductReviews = new List<ProductReview>();
-            foreach (var id in productReviewIds)
-            {
-                var productReview = productReviews.Find(x => x.Id == id);
-                if (productReview != null)
-                    sortedProductReviews.Add(productReview);
-            }
-
-            return sortedProductReviews;
+            return _productReviewRepository.GetByIds(productReviewIds);
         }
 
         /// <summary>
@@ -2493,7 +2457,7 @@ namespace Nop.Services.Catalog
             if (warehouseId == 0)
                 return null;
 
-            return _warehouseRepository.ToCachedGetById(warehouseId);
+            return _warehouseRepository.GetById(warehouseId);
         }
 
         /// <summary>

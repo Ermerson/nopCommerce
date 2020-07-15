@@ -54,7 +54,7 @@ namespace Nop.Web.Factories
         private readonly CommonSettings _commonSettings;
         private readonly CustomerSettings _customerSettings;
         private readonly IAddressModelFactory _addressModelFactory;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICheckoutAttributeFormatter _checkoutAttributeFormatter;
         private readonly ICheckoutAttributeParser _checkoutAttributeParser;
         private readonly ICheckoutAttributeService _checkoutAttributeService;
@@ -106,7 +106,7 @@ namespace Nop.Web.Factories
             CommonSettings commonSettings,
             CustomerSettings customerSettings,
             IAddressModelFactory addressModelFactory,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             ICheckoutAttributeFormatter checkoutAttributeFormatter,
             ICheckoutAttributeParser checkoutAttributeParser,
             ICheckoutAttributeService checkoutAttributeService,

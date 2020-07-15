@@ -31,7 +31,7 @@ namespace Nop.Plugin.Misc.SendinBlue.Controllers
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEmailAccountService _emailAccountService;
         private readonly IGenericAttributeService _genericAttributeService;
         private readonly ILocalizationService _localizationService;
@@ -52,7 +52,7 @@ namespace Nop.Plugin.Misc.SendinBlue.Controllers
 
         #region Ctor
 
-        public SendinBlueController(ICacheKeyService cacheKeyService,
+        public SendinBlueController(ICacheKeyManager cacheKeyService,
             IEmailAccountService emailAccountService,
             IGenericAttributeService genericAttributeService,
             ILocalizationService localizationService,

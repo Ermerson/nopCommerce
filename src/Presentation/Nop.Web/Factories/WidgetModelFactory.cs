@@ -19,7 +19,7 @@ namespace Nop.Web.Factories
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICustomerService _customerService;
         private readonly IStaticCacheManager _staticCacheManager;
         private readonly IStoreContext _storeContext;
@@ -31,7 +31,7 @@ namespace Nop.Web.Factories
 
         #region Ctor
 
-        public WidgetModelFactory(ICacheKeyService cacheKeyService,
+        public WidgetModelFactory(ICacheKeyManager cacheKeyService,
             ICustomerService customerService,
             IStaticCacheManager staticCacheManager,
             IStoreContext storeContext,

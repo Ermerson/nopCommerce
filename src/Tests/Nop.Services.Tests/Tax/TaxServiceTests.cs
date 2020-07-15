@@ -10,12 +10,12 @@ using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Stores;
 using Nop.Core.Domain.Tax;
+using Nop.Core.Events;
 using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Services.Common;
 using Nop.Services.Customers;
 using Nop.Services.Directory;
-using Nop.Services.Events;
 using Nop.Services.Logging;
 using Nop.Services.Tax;
 using Nop.Services.Tests.FakeServices.Providers;
@@ -85,8 +85,8 @@ namespace Nop.Services.Tests.Tax
             var mappings = new List<CustomerCustomerRoleMapping>();
 
             _customerCustomerRoleMappingRepo.Setup(r => r.Table).Returns(mappings.AsQueryable());
-            _customerCustomerRoleMappingRepo.Setup(r => r.Insert(It.IsAny<CustomerCustomerRoleMapping>())).Callback(
-                (CustomerCustomerRoleMapping ccrm) => { mappings.Add(ccrm); });
+            _customerCustomerRoleMappingRepo.Setup(r => r.Insert(It.IsAny<CustomerCustomerRoleMapping>(), It.IsAny<bool>())).Callback(
+                (CustomerCustomerRoleMapping ccrm, bool publishEvent) => { mappings.Add(ccrm); });
 
             _stateProvinceService = new Mock<IStateProvinceService>();
             _logger = new Mock<ILogger>();

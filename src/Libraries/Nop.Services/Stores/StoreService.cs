@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core.Domain.Stores;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
@@ -77,7 +78,7 @@ namespace Nop.Services.Stores
             if (storeId == 0)
                 return null;
 
-            var store = _storeRepository.ToCachedGetById(storeId);
+            var store = _storeRepository.GetById(storeId);
 
             return store;
         }

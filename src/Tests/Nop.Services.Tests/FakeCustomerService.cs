@@ -4,6 +4,7 @@ using Nop.Core.Caching;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Orders;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Common;
@@ -17,7 +18,7 @@ namespace Nop.Services.Tests
     {
         public FakeCustomerService(CachingSettings cachingSettings = null,
             CustomerSettings customerSettings = null,
-            ICacheKeyService cacheKeyService = null,
+            ICacheKeyManager cacheKeyService = null,
             IEventPublisher eventPublisher = null,
             IGenericAttributeService genericAttributeService = null,
             IRepository<Address> customerAddressRepository = null,

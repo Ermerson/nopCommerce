@@ -7,7 +7,7 @@ using Nop.Core.Caching;
 
 namespace Nop.Services.Caching
 {
-    public partial class CacheKeyService : ICacheKeyService
+    public partial class CacheKeyService : ICacheKeyManager
     {
         #region Fields
 

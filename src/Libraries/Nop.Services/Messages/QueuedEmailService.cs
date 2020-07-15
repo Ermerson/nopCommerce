@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
 using Nop.Core.Domain.Messages;
+using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 
 namespace Nop.Services.Messages
@@ -107,7 +107,7 @@ namespace Nop.Services.Messages
             if (queuedEmailId == 0)
                 return null;
 
-            return _queuedEmailRepository.ToCachedGetById(queuedEmailId);
+            return _queuedEmailRepository.GetById(queuedEmailId);
         }
 
         /// <summary>
@@ -117,23 +117,7 @@ namespace Nop.Services.Messages
         /// <returns>Queued emails</returns>
         public virtual IList<QueuedEmail> GetQueuedEmailsByIds(int[] queuedEmailIds)
         {
-            if (queuedEmailIds == null || queuedEmailIds.Length == 0)
-                return new List<QueuedEmail>();
-
-            var query = from qe in _queuedEmailRepository.Table
-                        where queuedEmailIds.Contains(qe.Id)
-                        select qe;
-            var queuedEmails = query.ToList();
-            //sort by passed identifiers
-            var sortedQueuedEmails = new List<QueuedEmail>();
-            foreach (var id in queuedEmailIds)
-            {
-                var queuedEmail = queuedEmails.Find(x => x.Id == id);
-                if (queuedEmail != null)
-                    sortedQueuedEmails.Add(queuedEmail);
-            }
-
-            return sortedQueuedEmails;
+            return _queuedEmailRepository.GetByIds(queuedEmailIds);
         }
 
         /// <summary>

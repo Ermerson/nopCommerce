@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Logging;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
@@ -18,7 +20,7 @@ namespace Nop.Services.Logging
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<ActivityLog> _activityLogRepository;
         private readonly IRepository<ActivityLogType> _activityLogTypeRepository;
@@ -29,7 +31,7 @@ namespace Nop.Services.Logging
 
         #region Ctor
 
-        public CustomerActivityService(ICacheKeyService cacheKeyService,
+        public CustomerActivityService(ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             IRepository<ActivityLog> activityLogRepository,
             IRepository<ActivityLogType> activityLogTypeRepository,
@@ -117,7 +119,7 @@ namespace Nop.Services.Logging
             if (activityLogTypeId == 0)
                 return null;
 
-            return _activityLogTypeRepository.ToCachedGetById(activityLogTypeId);
+            return _activityLogTypeRepository.GetById(activityLogTypeId);
         }
 
         /// <summary>

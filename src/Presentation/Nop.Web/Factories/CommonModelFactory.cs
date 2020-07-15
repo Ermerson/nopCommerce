@@ -60,7 +60,7 @@ namespace Nop.Web.Factories
         private readonly ForumSettings _forumSettings;
         private readonly IActionContextAccessor _actionContextAccessor;
         private readonly IBlogService _blogService;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICategoryService _categoryService;
         private readonly ICurrencyService _currencyService;
         private readonly ICustomerService _customerService;
@@ -109,7 +109,7 @@ namespace Nop.Web.Factories
             ForumSettings forumSettings,
             IActionContextAccessor actionContextAccessor,
             IBlogService blogService,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             ICategoryService categoryService,
             ICurrencyService currencyService,
             ICustomerService customerService,

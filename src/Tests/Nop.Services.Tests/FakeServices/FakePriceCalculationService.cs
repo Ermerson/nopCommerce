@@ -16,7 +16,7 @@ namespace Nop.Services.Tests.FakeServices
     {
         public FakePriceCalculationService(CatalogSettings catalogSettings = null,
             CurrencySettings currencySettings = null,
-            ICacheKeyService cacheKeyService = null,
+            ICacheKeyManager cacheKeyService = null,
             ICategoryService categoryService = null,
             ICurrencyService currencyService = null,
             ICustomerService customerService = null,

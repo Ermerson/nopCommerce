@@ -2,6 +2,7 @@
 using System.Linq;
 using Nop.Core;
 using Nop.Core.Domain.Common;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
@@ -58,7 +59,7 @@ namespace Nop.Services.Common
             if (searchTermId == 0)
                 return null;
 
-            return _searchTermRepository.ToCachedGetById(searchTermId);
+            return _searchTermRepository.GetById(searchTermId);
         }
 
         /// <summary>

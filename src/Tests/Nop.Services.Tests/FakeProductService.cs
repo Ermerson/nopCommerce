@@ -8,6 +8,7 @@ using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Security;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Stores;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Catalog;
@@ -26,7 +27,7 @@ namespace Nop.Services.Tests
         public FakeProductService(CatalogSettings catalogSettings = null,
             CommonSettings commonSettings = null,
             IAclService aclService = null,
-            ICacheKeyService cacheKeyService = null,
+            ICacheKeyManager cacheKeyService = null,
             ICustomerService customerService = null,
             INopDataProvider dataProvider = null,
             IDateRangeService dateRangeService = null,

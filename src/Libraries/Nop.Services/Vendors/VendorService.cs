@@ -4,9 +4,9 @@ using System.Linq;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Vendors;
+using Nop.Core.Events;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 
 namespace Nop.Services.Vendors
@@ -52,7 +52,7 @@ namespace Nop.Services.Vendors
             if (vendorId == 0)
                 return null;
 
-            return _vendorRepository.ToCachedGetById(vendorId);
+            return _vendorRepository.GetById(vendorId);
         }
 
         /// <summary>
@@ -139,11 +139,7 @@ namespace Nop.Services.Vendors
         /// <returns>Vendors</returns>
         public virtual IList<Vendor> GetVendorsByIds(int[] vendorIds)
         {
-            var query = _vendorRepository.Table;
-            if (vendorIds != null)
-                query = query.Where(v => vendorIds.Contains(v.Id));
-
-            return query.ToList();
+            return _vendorRepository.GetByIds(vendorIds);
         }
 
         /// <summary>
@@ -186,7 +182,7 @@ namespace Nop.Services.Vendors
             if (vendorNoteId == 0)
                 return null;
 
-            return _vendorNoteRepository.ToCachedGetById(vendorNoteId);
+            return _vendorNoteRepository.GetById(vendorNoteId);
         }
 
         /// <summary>

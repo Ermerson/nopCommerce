@@ -4,6 +4,7 @@ using System.Linq;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Directory;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
@@ -19,7 +20,7 @@ namespace Nop.Services.Directory
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IStaticCacheManager _staticCacheManager;
         private readonly IEventPublisher _eventPublisher;
         private readonly ILocalizationService _localizationService;
@@ -29,7 +30,7 @@ namespace Nop.Services.Directory
 
         #region Ctor
 
-        public StateProvinceService(ICacheKeyService cacheKeyService,
+        public StateProvinceService(ICacheKeyManager cacheKeyService,
             IStaticCacheManager staticCacheManager,
             IEventPublisher eventPublisher,
             ILocalizationService localizationService,
@@ -70,7 +71,7 @@ namespace Nop.Services.Directory
             if (stateProvinceId == 0)
                 return null;
 
-            return _stateProvinceRepository.ToCachedGetById(stateProvinceId);
+            return _stateProvinceRepository.GetById(stateProvinceId);
         }
 
         /// <summary>

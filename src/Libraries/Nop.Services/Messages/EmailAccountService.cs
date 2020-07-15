@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Messages;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
@@ -17,7 +19,7 @@ namespace Nop.Services.Messages
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<EmailAccount> _emailAccountRepository;
 
@@ -25,7 +27,7 @@ namespace Nop.Services.Messages
 
         #region Ctor
 
-        public EmailAccountService(ICacheKeyService cacheKeyService,
+        public EmailAccountService(ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             IRepository<EmailAccount> emailAccountRepository)
         {
@@ -132,7 +134,7 @@ namespace Nop.Services.Messages
             if (emailAccountId == 0)
                 return null;
 
-            return _emailAccountRepository.ToCachedGetById(emailAccountId);
+            return _emailAccountRepository.GetById(emailAccountId);
         }
 
         /// <summary>

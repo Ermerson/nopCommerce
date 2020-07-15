@@ -11,6 +11,7 @@ using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Discounts;
 using Nop.Core.Domain.Orders;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
@@ -39,7 +40,7 @@ namespace Nop.Services.Orders
         private readonly CatalogSettings _catalogSettings;
         private readonly IAclService _aclService;
         private readonly IActionContextAccessor _actionContextAccessor;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICheckoutAttributeParser _checkoutAttributeParser;
         private readonly ICheckoutAttributeService _checkoutAttributeService;
         private readonly ICurrencyService _currencyService;
@@ -73,7 +74,7 @@ namespace Nop.Services.Orders
         public ShoppingCartService(CatalogSettings catalogSettings,
             IAclService aclService,
             IActionContextAccessor actionContextAccessor,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             ICheckoutAttributeParser checkoutAttributeParser,
             ICheckoutAttributeService checkoutAttributeService,
             ICurrencyService currencyService,
@@ -1635,7 +1636,7 @@ namespace Nop.Services.Orders
 
             var warnings = new List<string>();
 
-            var shoppingCartItem = _sciRepository.ToCachedGetById(shoppingCartItemId);
+            var shoppingCartItem = _sciRepository.GetById(shoppingCartItemId);
 
             if (shoppingCartItem == null || shoppingCartItem.CustomerId != customer.Id)
                 return warnings;

@@ -16,6 +16,7 @@ using Nop.Core.Domain.Media;
 using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.Security;
 using Nop.Core.Domain.Tax;
+using Nop.Core.Events;
 using Nop.Core.Http;
 using Nop.Services.Authentication;
 using Nop.Services.Authentication.External;

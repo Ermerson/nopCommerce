@@ -4,6 +4,7 @@ using Nop.Core.Caching;
 using Nop.Data;
 using Nop.Core.Domain.Discounts;
 using Nop.Core.Domain.Orders;
+using Nop.Core.Events;
 using Nop.Services.Caching;
 using Nop.Services.Catalog;
 using Nop.Services.Customers;
@@ -16,7 +17,7 @@ namespace Nop.Services.Tests.FakeServices
 {
     public class FakeDiscountService : DiscountService
     {
-        public FakeDiscountService(ICacheKeyService cacheKeyService = null,
+        public FakeDiscountService(ICacheKeyManager cacheKeyService = null,
             ICustomerService customerService = null,
             IDiscountPluginManager discountPluginManager = null,
             IEventPublisher eventPublisher = null,

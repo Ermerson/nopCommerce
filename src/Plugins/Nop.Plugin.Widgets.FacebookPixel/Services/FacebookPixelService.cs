@@ -43,7 +43,7 @@ namespace Nop.Plugin.Widgets.FacebookPixel.Services
         #region Fields
 
         private readonly CurrencySettings _currencySettings;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICategoryService _categoryService;
         private readonly ICountryService _countryService;
         private readonly ICurrencyService _currencyService;
@@ -68,7 +68,7 @@ namespace Nop.Plugin.Widgets.FacebookPixel.Services
         #region Ctor
 
         public FacebookPixelService(CurrencySettings currencySettings,
-            ICacheKeyService cacheKeyService,
+            ICacheKeyManager cacheKeyService,
             ICategoryService categoryService,
             ICountryService countryService,
             ICurrencyService currencyService,

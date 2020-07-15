@@ -3,6 +3,7 @@ using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Data;
 using Nop.Core.Domain.Localization;
+using Nop.Core.Events;
 using Nop.Services.Caching;
 using Nop.Services.Configuration;
 using Nop.Services.Events;
@@ -14,7 +15,7 @@ namespace Nop.Services.Tests
 {
     public class TestLocalizationService : LocalizationService
     {
-        public TestLocalizationService(ICacheKeyService cacheKeyService, IEventPublisher eventPublisher, ILanguageService languageService, ILocalizedEntityService localizedEntityService, ILogger logger, IRepository<LocaleStringResource> lsrRepository, ISettingService settingService, IStaticCacheManager staticCacheManager, IWorkContext workContext, LocalizationSettings localizationSettings) 
+        public TestLocalizationService(ICacheKeyManager cacheKeyService, IEventPublisher eventPublisher, ILanguageService languageService, ILocalizedEntityService localizedEntityService, ILogger logger, IRepository<LocaleStringResource> lsrRepository, ISettingService settingService, IStaticCacheManager staticCacheManager, IWorkContext workContext, LocalizationSettings localizationSettings) 
             : base(cacheKeyService, eventPublisher, languageService, localizedEntityService, logger, lsrRepository, settingService, staticCacheManager, workContext, localizationSettings)
         {
         }

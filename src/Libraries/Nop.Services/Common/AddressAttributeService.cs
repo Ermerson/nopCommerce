@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Common;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
@@ -16,7 +18,7 @@ namespace Nop.Services.Common
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<AddressAttribute> _addressAttributeRepository;
         private readonly IRepository<AddressAttributeValue> _addressAttributeValueRepository;
@@ -25,7 +27,7 @@ namespace Nop.Services.Common
 
         #region Ctor
 
-        public AddressAttributeService(ICacheKeyService cacheKeyService,
+        public AddressAttributeService(ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             IRepository<AddressAttribute> addressAttributeRepository,
             IRepository<AddressAttributeValue> addressAttributeValueRepository)
@@ -78,7 +80,7 @@ namespace Nop.Services.Common
             if (addressAttributeId == 0)
                 return null;
 
-            return _addressAttributeRepository.ToCachedGetById(addressAttributeId);
+            return _addressAttributeRepository.GetById(addressAttributeId);
         }
 
         /// <summary>
@@ -154,7 +156,7 @@ namespace Nop.Services.Common
             if (addressAttributeValueId == 0)
                 return null;
 
-            return _addressAttributeValueRepository.ToCachedGetById(addressAttributeValueId);
+            return _addressAttributeValueRepository.GetById(addressAttributeValueId);
         }
 
         /// <summary>

@@ -3,6 +3,7 @@ using FluentAssertions;
 using Moq;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Common;
+using Nop.Core.Events;
 using Nop.Services.Common;
 using Nop.Services.Directory;
 using Nop.Services.Events;

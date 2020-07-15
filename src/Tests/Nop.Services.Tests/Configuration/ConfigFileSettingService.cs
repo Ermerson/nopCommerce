@@ -5,6 +5,7 @@ using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Data;
 using Nop.Core.Domain.Configuration;
+using Nop.Core.Events;
 using Nop.Services.Configuration;
 using Nop.Services.Events;
 

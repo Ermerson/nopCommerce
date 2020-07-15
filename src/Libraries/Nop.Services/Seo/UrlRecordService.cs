@@ -6,8 +6,8 @@ using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Seo;
+using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 using Nop.Services.Localization;
@@ -24,7 +24,7 @@ namespace Nop.Services.Seo
         private static readonly object _lock = new object();
         private static Dictionary<string, string> _seoCharacterTable;
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly ILanguageService _languageService;
         private readonly IRepository<UrlRecord> _urlRecordRepository;
@@ -37,7 +37,7 @@ namespace Nop.Services.Seo
 
         #region Ctor
 
-        public UrlRecordService(ICacheKeyService cacheKeyService,
+        public UrlRecordService(ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             ILanguageService languageService,
             IRepository<UrlRecord> urlRecordRepository,
@@ -1167,11 +1167,8 @@ namespace Nop.Services.Seo
         /// <returns>URL record</returns>
         public virtual IList<UrlRecord> GetUrlRecordsByIds(int[] urlRecordIds)
         {
-            var query = _urlRecordRepository.Table;
-
-            var key = _cacheKeyService.PrepareKeyForDefaultCache(NopSeoDefaults.UrlRecordByIdsCacheKey, urlRecordIds);
-
-            return query.Where(p => urlRecordIds.Contains(p.Id)).ToCachedList(key);
+            return _urlRecordRepository.GetByIds(urlRecordIds,
+                _cacheKeyService.PrepareKeyForDefaultCache(NopSeoDefaults.UrlRecordByIdsCacheKey, urlRecordIds));
         }
 
         /// <summary>
@@ -1184,7 +1181,7 @@ namespace Nop.Services.Seo
             if (urlRecordId == 0)
                 return null;
 
-            return _urlRecordRepository.ToCachedGetById(urlRecordId);
+            return _urlRecordRepository.GetById(urlRecordId);
         }
 
         /// <summary>

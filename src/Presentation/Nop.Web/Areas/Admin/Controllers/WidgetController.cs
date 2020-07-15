@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Nop.Core.Domain.Cms;
+using Nop.Core.Events;
 using Nop.Services.Cms;
 using Nop.Services.Configuration;
 using Nop.Services.Events;

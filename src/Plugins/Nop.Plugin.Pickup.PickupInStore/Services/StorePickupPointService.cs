@@ -28,7 +28,7 @@ namespace Nop.Plugin.Pickup.PickupInStore.Services
 
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IRepository<StorePickupPoint> _storePickupPointRepository;
         private readonly IStaticCacheManager _staticCacheManager;
 
@@ -42,7 +42,7 @@ namespace Nop.Plugin.Pickup.PickupInStore.Services
         /// <param name="cacheKeyService">Cache service</param>
         /// <param name="storePickupPointRepository">Store pickup point repository</param>
         /// <param name="staticCacheManager">Cache manager</param>
-        public StorePickupPointService(ICacheKeyService cacheKeyService,
+        public StorePickupPointService(ICacheKeyManager cacheKeyService,
             IRepository<StorePickupPoint> storePickupPointRepository,
             IStaticCacheManager staticCacheManager)
         {

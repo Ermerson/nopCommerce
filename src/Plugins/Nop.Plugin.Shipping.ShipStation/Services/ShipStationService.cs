@@ -46,7 +46,7 @@ namespace Nop.Plugin.Shipping.ShipStation.Services
         #region Fields
 
         private readonly IAddressService _addressService;
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICountryService _countryService;
         private readonly ICustomerService _customerService;
         private readonly ILogger _logger;
@@ -64,7 +64,7 @@ namespace Nop.Plugin.Shipping.ShipStation.Services
 
         #region Ctor
 
-        public ShipStationService(ICacheKeyService cacheKeyService,
+        public ShipStationService(ICacheKeyManager cacheKeyService,
             IAddressService addressService,
             ICountryService countryService,
             ICustomerService customerService,

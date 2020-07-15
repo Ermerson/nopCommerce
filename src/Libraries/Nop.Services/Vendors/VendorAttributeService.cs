@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Vendors;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
@@ -16,7 +18,7 @@ namespace Nop.Services.Vendors
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<VendorAttribute> _vendorAttributeRepository;
         private readonly IRepository<VendorAttributeValue> _vendorAttributeValueRepository;
@@ -25,7 +27,7 @@ namespace Nop.Services.Vendors
 
         #region Ctor
 
-        public VendorAttributeService(ICacheKeyService cacheKeyService,
+        public VendorAttributeService(ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             IRepository<VendorAttribute> vendorAttributeRepository,
             IRepository<VendorAttributeValue> vendorAttributeValueRepository)
@@ -63,7 +65,7 @@ namespace Nop.Services.Vendors
             if (vendorAttributeId == 0)
                 return null;
 
-            return _vendorAttributeRepository.ToCachedGetById(vendorAttributeId);
+            return _vendorAttributeRepository.GetById(vendorAttributeId);
         }
 
         /// <summary>
@@ -141,7 +143,7 @@ namespace Nop.Services.Vendors
             if (vendorAttributeValueId == 0)
                 return null;
 
-            return _vendorAttributeValueRepository.ToCachedGetById(vendorAttributeValueId);
+            return _vendorAttributeValueRepository.GetById(vendorAttributeValueId);
         }
 
         /// <summary>

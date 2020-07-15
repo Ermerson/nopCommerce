@@ -15,6 +15,7 @@ using Nop.Core.Domain.Payments;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Stores;
 using Nop.Core.Domain.Tax;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Affiliates;
 using Nop.Services.Catalog;
@@ -239,12 +240,12 @@ namespace Nop.Services.Tests.Orders
 
             _recurringPaymentRepository = new Mock<IRepository<RecurringPayment>>();
             var recurringPayments = new List<RecurringPayment>();
-            _recurringPaymentRepository.Setup(r => r.Insert(It.IsAny<RecurringPayment>())).Callback((RecurringPayment rph) => recurringPayments.Add(rph));
+            _recurringPaymentRepository.Setup(r => r.Insert(It.IsAny<RecurringPayment>(), It.IsAny<bool>())).Callback((RecurringPayment rph, bool publishEvent) => recurringPayments.Add(rph));
             _recurringPaymentRepository.Setup(r => r.Table).Returns(recurringPayments.AsQueryable());
 
             _recurringPaymentHistoryRepository = new Mock<IRepository<RecurringPaymentHistory>>();
             var recurringPaymentHistory = new List<RecurringPaymentHistory>();
-            _recurringPaymentHistoryRepository.Setup(r => r.Insert(It.IsAny<RecurringPaymentHistory>())).Callback((RecurringPaymentHistory rph) => recurringPaymentHistory.Add(rph));
+            _recurringPaymentHistoryRepository.Setup(r => r.Insert(It.IsAny<RecurringPaymentHistory>(), It.IsAny<bool>())).Callback((RecurringPaymentHistory rph, bool publishEvent) => recurringPaymentHistory.Add(rph));
             _recurringPaymentHistoryRepository.Setup(r => r.Table).Returns(recurringPaymentHistory.AsQueryable());
 
             _orderService = new OrderService(new CachingSettings(), _eventPublisher.Object, null, null, null, null, null, null, null, null, _recurringPaymentRepository.Object, _recurringPaymentHistoryRepository.Object, _shipmentService.Object);

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Shipping;
+using Nop.Core.Events;
 using Nop.Services.Common;
 using Nop.Services.Configuration;
 using Nop.Services.Directory;

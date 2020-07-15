@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Directory;
+using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
@@ -17,7 +19,7 @@ namespace Nop.Services.Directory
     {
         #region Fields
 
-        private readonly ICacheKeyService _cacheKeyService;
+        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<MeasureDimension> _measureDimensionRepository;
         private readonly IRepository<MeasureWeight> _measureWeightRepository;
@@ -27,7 +29,7 @@ namespace Nop.Services.Directory
 
         #region Ctor
 
-        public MeasureService(ICacheKeyService cacheKeyService,
+        public MeasureService(ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             IRepository<MeasureDimension> measureDimensionRepository,
             IRepository<MeasureWeight> measureWeightRepository,
@@ -71,7 +73,7 @@ namespace Nop.Services.Directory
             if (measureDimensionId == 0)
                 return null;
 
-            return _measureDimensionRepository.ToCachedGetById(measureDimensionId);
+            return _measureDimensionRepository.GetById(measureDimensionId);
         }
 
         /// <summary>
@@ -244,7 +246,7 @@ namespace Nop.Services.Directory
             if (measureWeightId == 0)
                 return null;
 
-            return _measureWeightRepository.ToCachedGetById(measureWeightId);
+            return _measureWeightRepository.GetById(measureWeightId);
         }
 
         /// <summary>

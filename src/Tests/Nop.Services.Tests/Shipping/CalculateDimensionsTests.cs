@@ -7,6 +7,7 @@ using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Stores;
+using Nop.Core.Events;
 using Nop.Services.Catalog;
 using Nop.Services.Customers;
 using Nop.Services.Events;
