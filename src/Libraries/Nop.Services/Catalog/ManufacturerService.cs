@@ -24,7 +24,6 @@ namespace Nop.Services.Catalog
         #region Fields
 
         private readonly CatalogSettings _catalogSettings;
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICustomerService _customerService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<AclRecord> _aclRepository;
@@ -33,6 +32,7 @@ namespace Nop.Services.Catalog
         private readonly IRepository<Product> _productRepository;
         private readonly IRepository<ProductManufacturer> _productManufacturerRepository;
         private readonly IRepository<StoreMapping> _storeMappingRepository;
+        private readonly IStaticCacheManager _staticCacheManager;
         private readonly IStoreContext _storeContext;
         private readonly IWorkContext _workContext;
 
@@ -41,7 +41,6 @@ namespace Nop.Services.Catalog
         #region Ctor
 
         public ManufacturerService(CatalogSettings catalogSettings,
-            ICacheKeyManager cacheKeyService,
             ICustomerService customerService,
             IEventPublisher eventPublisher,
             IRepository<AclRecord> aclRepository,
@@ -50,11 +49,11 @@ namespace Nop.Services.Catalog
             IRepository<Product> productRepository,
             IRepository<ProductManufacturer> productManufacturerRepository,
             IRepository<StoreMapping> storeMappingRepository,
+            IStaticCacheManager staticCacheManager,
             IStoreContext storeContext,
             IWorkContext workContext)
         {
             _catalogSettings = catalogSettings;
-            _cacheKeyService = cacheKeyService;
             _customerService = customerService;
             _eventPublisher = eventPublisher;
             _aclRepository = aclRepository;
@@ -63,6 +62,7 @@ namespace Nop.Services.Catalog
             _productRepository = productRepository;
             _productManufacturerRepository = productManufacturerRepository;
             _storeMappingRepository = storeMappingRepository;
+            _staticCacheManager = staticCacheManager;
             _storeContext = storeContext;
             _workContext = workContext;
         }
@@ -192,7 +192,7 @@ namespace Nop.Services.Catalog
             if (discount == null)
                 throw new ArgumentNullException(nameof(discount));
 
-            var cacheKey = _cacheKeyService.PrepareKeyForDefaultCache(NopDiscountDefaults.DiscountManufacturerIdsModelCacheKey, 
+            var cacheKey = _staticCacheManager.PrepareKeyForDefaultCache(NopDiscountDefaults.DiscountManufacturerIdsModelCacheKey, 
                 discount,
                 _customerService.GetCustomerRoleIds(customer),
                 _storeContext.CurrentStore);
@@ -388,7 +388,7 @@ namespace Nop.Services.Catalog
             if (productId == 0)
                 return new List<ProductManufacturer>();
 
-            var key = _cacheKeyService.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductManufacturersAllByProductIdCacheKey, productId,
+            var key = _staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductManufacturersAllByProductIdCacheKey, productId,
                 showHidden, _workContext.CurrentCustomer, _storeContext.CurrentStore);
 
             var query = from pm in _productManufacturerRepository.Table

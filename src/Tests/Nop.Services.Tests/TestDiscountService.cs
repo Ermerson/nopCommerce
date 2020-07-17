@@ -24,8 +24,7 @@ namespace Nop.Services.Tests
     {
         private readonly List<Discount> _discounts;
 
-        public TestDiscountService(ICacheKeyManager cacheKeyService,
-            ICustomerService customerService,
+        public TestDiscountService(ICustomerService customerService,
             IDiscountPluginManager discountPluginManager,
             IEventPublisher eventPublisher,
             ILocalizationService localizationService,
@@ -36,7 +35,6 @@ namespace Nop.Services.Tests
             IRepository<Order> orderRepository,
             IStaticCacheManager staticCacheManager,
             IStoreContext storeContext) : base(
-            cacheKeyService,
             customerService,
             discountPluginManager,
             eventPublisher,
@@ -120,7 +118,6 @@ namespace Nop.Services.Tests
             var orderRepo = new Mock<IRepository<Order>>();
 
             var discountService = new TestDiscountService(
-                new FakeCacheKeyService(),
                 customerService.Object,
                 discountPluginManager,
                 eventPublisher.Object,

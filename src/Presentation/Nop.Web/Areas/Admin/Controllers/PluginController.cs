@@ -13,7 +13,6 @@ using Nop.Core.Events;
 using Nop.Services.Authentication.External;
 using Nop.Services.Cms;
 using Nop.Services.Configuration;
-using Nop.Services.Events;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Messages;

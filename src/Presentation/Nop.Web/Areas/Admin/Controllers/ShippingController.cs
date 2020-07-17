@@ -10,7 +10,6 @@ using Nop.Core.Events;
 using Nop.Services.Common;
 using Nop.Services.Configuration;
 using Nop.Services.Directory;
-using Nop.Services.Events;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Messages;

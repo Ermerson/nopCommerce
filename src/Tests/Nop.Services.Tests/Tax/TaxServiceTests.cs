@@ -4,6 +4,7 @@ using FluentAssertions;
 using Moq;
 using Nop.Core;
 using Nop.Core.Caching;
+using Nop.Core.Configuration;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
@@ -97,9 +98,7 @@ namespace Nop.Services.Tests.Tax
             _shippingSettings = new ShippingSettings();
             _addressSettings = new AddressSettings();
 
-            _customerService = new CustomerService(new CachingSettings(),
-                new CustomerSettings(),
-                new FakeCacheKeyService(),
+            _customerService = new CustomerService(new CustomerSettings(),
                 _eventPublisher.Object,
                 _genericAttributeService.Object,
                 null,
@@ -111,6 +110,7 @@ namespace Nop.Services.Tests.Tax
                 null,
                 null,
                 new TestCacheManager(),
+                new NopConfig(), 
                 _storeContext.Object,
                 null);
 

@@ -9,11 +9,9 @@ using Nop.Core.Domain.Seo;
 using Nop.Core.Events;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Common;
 using Nop.Services.Customers;
-using Nop.Services.Events;
 using Nop.Services.Messages;
 using Nop.Services.Seo;
 
@@ -27,7 +25,6 @@ namespace Nop.Services.Forums
         #region Fields
 
         private readonly ForumSettings _forumSettings;
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICustomerService _customerService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IGenericAttributeService _genericAttributeService;
@@ -39,6 +36,7 @@ namespace Nop.Services.Forums
         private readonly IRepository<ForumSubscription> _forumSubscriptionRepository;
         private readonly IRepository<ForumTopic> _forumTopicRepository;
         private readonly IRepository<PrivateMessage> _forumPrivateMessageRepository;
+        private readonly IStaticCacheManager _staticCacheManager;
         private readonly IUrlRecordService _urlRecordService;
         private readonly IWorkContext _workContext;
         private readonly IWorkflowMessageService _workflowMessageService;
@@ -49,7 +47,6 @@ namespace Nop.Services.Forums
         #region Ctor
 
         public ForumService(ForumSettings forumSettings,
-            ICacheKeyManager cacheKeyService,
             ICustomerService customerService,
             IEventPublisher eventPublisher,
             IGenericAttributeService genericAttributeService,
@@ -61,13 +58,13 @@ namespace Nop.Services.Forums
             IRepository<ForumSubscription> forumSubscriptionRepository,
             IRepository<ForumTopic> forumTopicRepository,
             IRepository<PrivateMessage> forumPrivateMessageRepository,
+            IStaticCacheManager staticCacheManager,
             IUrlRecordService urlRecordService,
             IWorkContext workContext,
             IWorkflowMessageService workflowMessageService,
             SeoSettings seoSettings)
         {
             _forumSettings = forumSettings;
-            _cacheKeyService = cacheKeyService;
             _customerService = customerService;
             _eventPublisher = eventPublisher;
             _genericAttributeService = genericAttributeService;
@@ -79,6 +76,7 @@ namespace Nop.Services.Forums
             _forumSubscriptionRepository = forumSubscriptionRepository;
             _forumTopicRepository = forumTopicRepository;
             _forumPrivateMessageRepository = forumPrivateMessageRepository;
+            _staticCacheManager = staticCacheManager;
             _urlRecordService = urlRecordService;
             _workContext = workContext;
             _workflowMessageService = workflowMessageService;
@@ -278,7 +276,7 @@ namespace Nop.Services.Forums
                 orderby fg.DisplayOrder, fg.Id
                 select fg;
 
-            return query.ToCachedList(_cacheKeyService.PrepareKeyForDefaultCache(NopForumDefaults.ForumGroupAllCacheKey));
+            return query.ToCachedList(_staticCacheManager.PrepareKeyForDefaultCache(NopForumDefaults.ForumGroupAllCacheKey));
         }
 
         /// <summary>
@@ -378,7 +376,7 @@ namespace Nop.Services.Forums
         /// <returns>Forums</returns>
         public virtual IList<Forum> GetAllForumsByGroupId(int forumGroupId)
         {
-            var key = _cacheKeyService.PrepareKeyForDefaultCache(NopForumDefaults.ForumAllByForumGroupIdCacheKey, forumGroupId);
+            var key = _staticCacheManager.PrepareKeyForDefaultCache(NopForumDefaults.ForumAllByForumGroupIdCacheKey, forumGroupId);
 
             var query = from f in _forumRepository.Table
                 orderby f.DisplayOrder, f.Id

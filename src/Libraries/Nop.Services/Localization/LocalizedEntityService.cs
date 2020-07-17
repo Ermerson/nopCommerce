@@ -8,9 +8,7 @@ using Nop.Core.Caching;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
-using Nop.Services.Events;
 
 namespace Nop.Services.Localization
 {
@@ -21,7 +19,6 @@ namespace Nop.Services.Localization
     {
         #region Fields
 
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<LocalizedProperty> _localizedPropertyRepository;
         private readonly IStaticCacheManager _staticCacheManager;
@@ -31,13 +28,11 @@ namespace Nop.Services.Localization
 
         #region Ctor
 
-        public LocalizedEntityService(ICacheKeyManager cacheKeyService,
-            IEventPublisher eventPublisher,
+        public LocalizedEntityService(IEventPublisher eventPublisher,
             IRepository<LocalizedProperty> localizedPropertyRepository,
             IStaticCacheManager staticCacheManager,
             LocalizationSettings localizationSettings)
         {
-            _cacheKeyService = cacheKeyService;
             _eventPublisher = eventPublisher;
             _localizedPropertyRepository = localizedPropertyRepository;
             _staticCacheManager = staticCacheManager;
@@ -79,7 +74,7 @@ namespace Nop.Services.Localization
             var query = from lp in _localizedPropertyRepository.Table
                 select lp;
 
-            return query.ToCachedList(_cacheKeyService.PrepareKeyForDefaultCache(NopLocalizationDefaults.LocalizedPropertyAllCacheKey));
+            return query.ToCachedList(_staticCacheManager.PrepareKeyForDefaultCache(NopLocalizationDefaults.LocalizedPropertyAllCacheKey));
         }
 
         #endregion
@@ -124,7 +119,7 @@ namespace Nop.Services.Localization
         /// <returns>Found localized value</returns>
         public virtual string GetLocalizedValue(int languageId, int entityId, string localeKeyGroup, string localeKey)
         {
-            var key = _cacheKeyService.PrepareKeyForDefaultCache(NopLocalizationDefaults.LocalizedPropertyCacheKey
+            var key = _staticCacheManager.PrepareKeyForDefaultCache(NopLocalizationDefaults.LocalizedPropertyCacheKey
                 , languageId, entityId, localeKeyGroup, localeKey);
 
             return _staticCacheManager.Get(key, () =>

@@ -9,7 +9,6 @@ using Nop.Core.Domain.Stores;
 using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching.Extensions;
-using Nop.Services.Events;
 
 namespace Nop.Services.News
 {
@@ -21,29 +20,29 @@ namespace Nop.Services.News
         #region Fields
 
         private readonly CatalogSettings _catalogSettings;
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<NewsComment> _newsCommentRepository;
         private readonly IRepository<NewsItem> _newsItemRepository;
         private readonly IRepository<StoreMapping> _storeMappingRepository;
+        private readonly IStaticCacheManager _staticCacheManager;
 
         #endregion
 
         #region Ctor
 
         public NewsService(CatalogSettings catalogSettings,
-            ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             IRepository<NewsComment> newsCommentRepository,
             IRepository<NewsItem> newsItemRepository,
-            IRepository<StoreMapping> storeMappingRepository)
+            IRepository<StoreMapping> storeMappingRepository,
+            IStaticCacheManager staticCacheManager)
         {
             _catalogSettings = catalogSettings;
-            _cacheKeyService = cacheKeyService;
             _eventPublisher = eventPublisher;
             _newsCommentRepository = newsCommentRepository;
             _newsItemRepository = newsItemRepository;
             _storeMappingRepository = storeMappingRepository;
+            _staticCacheManager = staticCacheManager;
         }
 
         #endregion
@@ -273,7 +272,7 @@ namespace Nop.Services.News
             if (isApproved.HasValue)
                 query = query.Where(comment => comment.IsApproved == isApproved.Value);
 
-            var cacheKey = _cacheKeyService.PrepareKeyForDefaultCache(NopNewsDefaults.NewsCommentsNumberCacheKey, newsItem, storeId, isApproved);
+            var cacheKey = _staticCacheManager.PrepareKeyForDefaultCache(NopNewsDefaults.NewsCommentsNumberCacheKey, newsItem, storeId, isApproved);
 
             return query.ToCachedCount(cacheKey);
         }

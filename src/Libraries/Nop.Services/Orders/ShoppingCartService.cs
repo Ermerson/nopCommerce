@@ -13,13 +13,10 @@ using Nop.Core.Domain.Discounts;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Catalog;
 using Nop.Services.Common;
 using Nop.Services.Customers;
 using Nop.Services.Directory;
-using Nop.Services.Events;
 using Nop.Services.Helpers;
 using Nop.Services.Localization;
 using Nop.Services.Security;
@@ -40,7 +37,6 @@ namespace Nop.Services.Orders
         private readonly CatalogSettings _catalogSettings;
         private readonly IAclService _aclService;
         private readonly IActionContextAccessor _actionContextAccessor;
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICheckoutAttributeParser _checkoutAttributeParser;
         private readonly ICheckoutAttributeService _checkoutAttributeService;
         private readonly ICurrencyService _currencyService;
@@ -74,7 +70,6 @@ namespace Nop.Services.Orders
         public ShoppingCartService(CatalogSettings catalogSettings,
             IAclService aclService,
             IActionContextAccessor actionContextAccessor,
-            ICacheKeyManager cacheKeyService,
             ICheckoutAttributeParser checkoutAttributeParser,
             ICheckoutAttributeService checkoutAttributeService,
             ICurrencyService currencyService,
@@ -104,7 +99,6 @@ namespace Nop.Services.Orders
             _catalogSettings = catalogSettings;
             _aclService = aclService;
             _actionContextAccessor = actionContextAccessor;
-            _cacheKeyService = cacheKeyService;
             _checkoutAttributeParser = checkoutAttributeParser;
             _checkoutAttributeService = checkoutAttributeService;
             _currencyService = currencyService;
@@ -709,7 +703,7 @@ namespace Nop.Services.Orders
             if (createdToUtc.HasValue)
                 items = items.Where(item => createdToUtc.Value >= item.CreatedOnUtc);
 
-            var key = _cacheKeyService.PrepareKeyForShortTermCache(NopOrderDefaults.ShoppingCartCacheKey, customer, shoppingCartType, storeId, productId, createdFromUtc, createdToUtc);
+            var key = _staticCacheManager.PrepareKeyForShortTermCache(NopOrderDefaults.ShoppingCartCacheKey, customer, shoppingCartType, storeId, productId, createdFromUtc, createdToUtc);
 
             return _staticCacheManager.Get(key, () => items.ToList());
         }

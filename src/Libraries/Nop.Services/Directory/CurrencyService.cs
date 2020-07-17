@@ -6,9 +6,7 @@ using Nop.Core.Caching;
 using Nop.Core.Domain.Directory;
 using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
-using Nop.Services.Events;
 using Nop.Services.Stores;
 
 namespace Nop.Services.Directory
@@ -21,10 +19,10 @@ namespace Nop.Services.Directory
         #region Fields
 
         private readonly CurrencySettings _currencySettings;
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IExchangeRatePluginManager _exchangeRatePluginManager;
         private readonly IRepository<Currency> _currencyRepository;
+        private readonly IStaticCacheManager _staticCacheManager;
         private readonly IStoreMappingService _storeMappingService;
 
         #endregion
@@ -32,17 +30,17 @@ namespace Nop.Services.Directory
         #region Ctor
 
         public CurrencyService(CurrencySettings currencySettings,
-            ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             IExchangeRatePluginManager exchangeRatePluginManager,
             IRepository<Currency> currencyRepository,
+            IStaticCacheManager staticCacheManager,
             IStoreMappingService storeMappingService)
         {
-            _cacheKeyService = cacheKeyService;
             _currencySettings = currencySettings;
             _eventPublisher = eventPublisher;
             _exchangeRatePluginManager = exchangeRatePluginManager;
             _currencyRepository = currencyRepository;
+            _staticCacheManager = staticCacheManager;
             _storeMappingService = storeMappingService;
         }
 
@@ -108,7 +106,7 @@ namespace Nop.Services.Directory
 
             query = query.OrderBy(c => c.DisplayOrder).ThenBy(c => c.Id);
 
-            var key = _cacheKeyService.PrepareKeyForDefaultCache(NopDirectoryDefaults.CurrenciesAllCacheKey, showHidden);
+            var key = _staticCacheManager.PrepareKeyForDefaultCache(NopDirectoryDefaults.CurrenciesAllCacheKey, showHidden);
 
             var currencies = query.ToCachedList(key);
 

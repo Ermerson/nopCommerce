@@ -7,9 +7,7 @@ using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.Stores;
 using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
-using Nop.Services.Events;
 using Nop.Services.Localization;
 using Nop.Services.Stores;
 
@@ -23,7 +21,6 @@ namespace Nop.Services.Messages
         #region Fields
 
         private readonly CatalogSettings _catalogSettings;
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IStaticCacheManager _staticCacheManager;
         private readonly IEventPublisher _eventPublisher;
         private readonly ILanguageService _languageService;
@@ -38,7 +35,6 @@ namespace Nop.Services.Messages
         #region Ctor
 
         public MessageTemplateService(CatalogSettings catalogSettings,
-            ICacheKeyManager cacheKeyService,
             IStaticCacheManager staticCacheManager,
             IEventPublisher eventPublisher,
             ILanguageService languageService,
@@ -49,7 +45,6 @@ namespace Nop.Services.Messages
             IStoreMappingService storeMappingService)
         {
             _catalogSettings = catalogSettings;
-            _cacheKeyService = cacheKeyService;
             _staticCacheManager = staticCacheManager;
             _eventPublisher = eventPublisher;
             _languageService = languageService;
@@ -133,7 +128,7 @@ namespace Nop.Services.Messages
             if (string.IsNullOrWhiteSpace(messageTemplateName))
                 throw new ArgumentException(nameof(messageTemplateName));
 
-            var key = _cacheKeyService.PrepareKeyForDefaultCache(NopMessageDefaults.MessageTemplatesByNameCacheKey, messageTemplateName, storeId);
+            var key = _staticCacheManager.PrepareKeyForDefaultCache(NopMessageDefaults.MessageTemplatesByNameCacheKey, messageTemplateName, storeId);
 
             return _staticCacheManager.Get(key, () =>
             {
@@ -157,7 +152,7 @@ namespace Nop.Services.Messages
         /// <returns>Message template list</returns>
         public virtual IList<MessageTemplate> GetAllMessageTemplates(int storeId)
         {
-            var key = _cacheKeyService.PrepareKeyForDefaultCache(NopMessageDefaults.MessageTemplatesAllCacheKey, storeId);
+            var key = _staticCacheManager.PrepareKeyForDefaultCache(NopMessageDefaults.MessageTemplatesAllCacheKey, storeId);
 
             var query = _messageTemplateRepository.Table;
             query = query.OrderBy(t => t.Name);

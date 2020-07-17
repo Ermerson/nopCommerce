@@ -73,9 +73,9 @@ namespace Nop.Services.Tests.Directory
             };
             _currencyRepository = new Mock<IRepository<Currency>>();
             _currencyRepository.Setup(x => x.Table).Returns(new List<Currency> { _currencyUSD, _currencyEUR, _currencyRUR }.AsQueryable());
-            _currencyRepository.Setup(x => x.GetById(_currencyUSD.Id, true, null)).Returns(_currencyUSD);
-            _currencyRepository.Setup(x => x.GetById(_currencyEUR.Id, true, null)).Returns(_currencyEUR);
-            _currencyRepository.Setup(x => x.GetById(_currencyRUR.Id, true, null)).Returns(_currencyRUR);
+            _currencyRepository.Setup(x => x.GetById(_currencyUSD.Id, null)).Returns(_currencyUSD);
+            _currencyRepository.Setup(x => x.GetById(_currencyEUR.Id, null)).Returns(_currencyEUR);
+            _currencyRepository.Setup(x => x.GetById(_currencyRUR.Id, null)).Returns(_currencyRUR);
 
             _storeMappingService = new Mock<IStoreMappingService>();
 
@@ -91,10 +91,10 @@ namespace Nop.Services.Tests.Directory
             var pluginService = new FakePluginService();
             _exchangeRatePluginManager = new ExchangeRatePluginManager(_currencySettings, new Mock<ICustomerService>().Object, pluginService);
             _currencyService = new CurrencyService(_currencySettings,
-                new FakeCacheKeyService(),
                 _eventPublisher.Object,
                 _exchangeRatePluginManager,
                 _currencyRepository.Object,
+                new TestCacheManager(), 
                 _storeMappingService.Object);
         }
 

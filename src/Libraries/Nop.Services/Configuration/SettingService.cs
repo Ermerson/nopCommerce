@@ -11,7 +11,6 @@ using Nop.Core.Domain.Configuration;
 using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching.Extensions;
-using Nop.Services.Events;
 
 namespace Nop.Services.Configuration
 {

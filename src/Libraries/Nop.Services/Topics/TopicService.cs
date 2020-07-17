@@ -9,10 +9,8 @@ using Nop.Core.Domain.Stores;
 using Nop.Core.Domain.Topics;
 using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Customers;
-using Nop.Services.Events;
 using Nop.Services.Security;
 using Nop.Services.Stores;
 
@@ -27,7 +25,6 @@ namespace Nop.Services.Topics
 
         private readonly CatalogSettings _catalogSettings;
         private readonly IAclService _aclService;
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICustomerService _customerService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<AclRecord> _aclRepository;
@@ -43,7 +40,6 @@ namespace Nop.Services.Topics
 
         public TopicService(CatalogSettings catalogSettings,
             IAclService aclService,
-            ICacheKeyManager cacheKeyService,
             ICustomerService customerService,
             IEventPublisher eventPublisher,
             IRepository<AclRecord> aclRepository,
@@ -55,7 +51,6 @@ namespace Nop.Services.Topics
         {
             _catalogSettings = catalogSettings;
             _aclService = aclService;
-            _cacheKeyService = cacheKeyService;
             _customerService = customerService;
             _eventPublisher = eventPublisher;
             _aclRepository = aclRepository;
@@ -110,7 +105,7 @@ namespace Nop.Services.Topics
             if (string.IsNullOrEmpty(systemName))
                 return null;
 
-            var cacheKey = _cacheKeyService.PrepareKeyForDefaultCache(NopTopicDefaults.TopicBySystemNameCacheKey
+            var cacheKey = _staticCacheManager.PrepareKeyForDefaultCache(NopTopicDefaults.TopicBySystemNameCacheKey
                 , systemName, storeId, _customerService.GetCustomerRoleIds(_workContext.CurrentCustomer));
 
             var topic = _staticCacheManager.Get(cacheKey, () =>
@@ -150,9 +145,9 @@ namespace Nop.Services.Topics
         public virtual IList<Topic> GetAllTopics(int storeId, bool ignorAcl = false, bool showHidden = false, bool onlyIncludedInTopMenu = false)
         {
             var key = ignorAcl
-                ? _cacheKeyService.PrepareKeyForDefaultCache(NopTopicDefaults.TopicsAllCacheKey, storeId, showHidden,
+                ? _staticCacheManager.PrepareKeyForDefaultCache(NopTopicDefaults.TopicsAllCacheKey, storeId, showHidden,
                     onlyIncludedInTopMenu)
-                : _cacheKeyService.PrepareKeyForDefaultCache(NopTopicDefaults.TopicsAllWithACLCacheKey,
+                : _staticCacheManager.PrepareKeyForDefaultCache(NopTopicDefaults.TopicsAllWithACLCacheKey,
                     storeId, showHidden, onlyIncludedInTopMenu,
                     _customerService.GetCustomerRoleIds(_workContext.CurrentCustomer));
 

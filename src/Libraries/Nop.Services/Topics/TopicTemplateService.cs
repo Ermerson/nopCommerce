@@ -5,9 +5,7 @@ using Nop.Core.Caching;
 using Nop.Core.Domain.Topics;
 using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
-using Nop.Services.Events;
 
 namespace Nop.Services.Topics
 {
@@ -18,21 +16,21 @@ namespace Nop.Services.Topics
     {
         #region Fields
 
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<TopicTemplate> _topicTemplateRepository;
+        private readonly IStaticCacheManager _staticCacheManager;
 
         #endregion
 
         #region Ctor
 
-        public TopicTemplateService(ICacheKeyManager cacheKeyService,
-            IEventPublisher eventPublisher,
-            IRepository<TopicTemplate> topicTemplateRepository)
+        public TopicTemplateService(IEventPublisher eventPublisher,
+            IRepository<TopicTemplate> topicTemplateRepository,
+            IStaticCacheManager staticCacheManager)
         {
-            _cacheKeyService = cacheKeyService;
             _eventPublisher = eventPublisher;
             _topicTemplateRepository = topicTemplateRepository;
+            _staticCacheManager = staticCacheManager;
         }
 
         #endregion
@@ -64,7 +62,7 @@ namespace Nop.Services.Topics
                         orderby pt.DisplayOrder, pt.Id
                         select pt;
 
-            var templates = query.ToCachedList(_cacheKeyService.PrepareKeyForDefaultCache(NopTopicDefaults.TopicTemplatesAllCacheKey));
+            var templates = query.ToCachedList(_staticCacheManager.PrepareKeyForDefaultCache(NopTopicDefaults.TopicTemplatesAllCacheKey));
 
             return templates;
         }

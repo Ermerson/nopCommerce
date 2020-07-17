@@ -8,10 +8,8 @@ using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Security;
 using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Customers;
-using Nop.Services.Events;
 
 namespace Nop.Services.Security
 {
@@ -23,10 +21,10 @@ namespace Nop.Services.Security
         #region Fields
 
         private readonly CatalogSettings _catalogSettings;
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICustomerService _customerService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<AclRecord> _aclRecordRepository;
+        private readonly IStaticCacheManager _staticCacheManager;
         private readonly IWorkContext _workContext;
 
         #endregion
@@ -34,17 +32,17 @@ namespace Nop.Services.Security
         #region Ctor
 
         public AclService(CatalogSettings catalogSettings,
-            ICacheKeyManager cacheKeyService,
             ICustomerService customerService,
             IEventPublisher eventPublisher,
             IRepository<AclRecord> aclRecordRepository,
+            IStaticCacheManager staticCacheManager,
             IWorkContext workContext)
         {
             _catalogSettings = catalogSettings;
-            _cacheKeyService = cacheKeyService;
             _customerService = customerService;
             _eventPublisher = eventPublisher;
             _aclRecordRepository = aclRecordRepository;
+            _staticCacheManager = staticCacheManager;
             _workContext = workContext;
         }
 
@@ -173,7 +171,7 @@ namespace Nop.Services.Security
             var entityId = entity.Id;
             var entityName = entity.GetType().Name;
 
-            var key = _cacheKeyService.PrepareKeyForDefaultCache(NopSecurityDefaults.AclRecordByEntityIdNameCacheKey, entityId, entityName);
+            var key = _staticCacheManager.PrepareKeyForDefaultCache(NopSecurityDefaults.AclRecordByEntityIdNameCacheKey, entityId, entityName);
 
             var query = from ur in _aclRecordRepository.Table
                 where ur.EntityId == entityId &&

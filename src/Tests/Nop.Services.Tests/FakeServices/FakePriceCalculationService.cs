@@ -16,7 +16,6 @@ namespace Nop.Services.Tests.FakeServices
     {
         public FakePriceCalculationService(CatalogSettings catalogSettings = null,
             CurrencySettings currencySettings = null,
-            ICacheKeyManager cacheKeyService = null,
             ICategoryService categoryService = null,
             ICurrencyService currencyService = null,
             ICustomerService customerService = null,
@@ -29,7 +28,6 @@ namespace Nop.Services.Tests.FakeServices
             IWorkContext workContext = null) : base(
                 catalogSettings ?? new CatalogSettings(),
                 currencySettings ?? new CurrencySettings(),
-                cacheKeyService ?? new FakeCacheKeyService(),
                 categoryService ?? new Mock<ICategoryService>().Object,
                 currencyService ?? new Mock<ICurrencyService>().Object,
                 customerService ?? new Mock<ICustomerService>().Object,

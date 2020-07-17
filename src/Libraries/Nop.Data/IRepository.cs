@@ -20,10 +20,9 @@ namespace Nop.Data
         /// Get the entity entry
         /// </summary>
         /// <param name="id">Entity entry identifier</param>
-        /// <param name="cache">Whether to cache entry</param>
-        /// <param name="cacheTime">Cache time in minutes; pass null to use default value</param>
+        /// <param name="cacheTime">Cache time in minutes; pass null to use default value; pass 0 to do not cache</param>
         /// <returns>Entity entry</returns>
-        TEntity GetById(int? id, bool cache = true, int? cacheTime = null);
+        TEntity GetById(int? id, int? cacheTime = null);
 
         /// <summary>
         /// Get entity entries by identifiers
@@ -109,10 +108,9 @@ namespace Nop.Data
         /// Get all entity entries
         /// </summary>
         /// <param name="func">Function to select entries</param>
-        /// <param name="cacheKeyFunc">Function to get cache key; pass null to not cache entries</param>
+        /// <param name="cacheKey">Cache key; pass null to don't cache</param>
         /// <returns>Entity entries</returns>
-        IList<TEntity> GetAll(Func<IQueryable<TEntity>, IQueryable<TEntity>> func = null,
-            Func<ICacheKeyManager, CacheKey> cacheKeyFunc = null);
+        IList<TEntity> GetAll(Func<IQueryable<TEntity>, IQueryable<TEntity>> func = null, CacheKey cacheKey = null);
 
         /// <summary>
         /// Get paged list of all entity entries

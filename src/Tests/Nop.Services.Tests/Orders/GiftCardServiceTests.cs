@@ -22,6 +22,8 @@ namespace Nop.Services.Tests.Orders
         [SetUp]
         public new void SetUp()
         {
+            base.SetUp();
+
             _eventPublisher = new Mock<IEventPublisher>();
 
             _giftCardRepository = new Mock<IRepository<GiftCard>>();
@@ -31,7 +33,7 @@ namespace Nop.Services.Tests.Orders
             _giftCardRepository.Setup(r => r.Insert(It.IsAny<GiftCard>(), It.IsAny<bool>())).Callback((GiftCard gc, bool publishEvent) => giftCardStore.Add(gc));
             _giftCardRepository.Setup(r => r.Table).Returns(giftCardStore.AsQueryable());
 
-            _giftCardRepository.Setup(r => r.GetById(It.IsAny<int>(), true, null)).Returns((int id, bool cache, int? cacheTime) => _giftCardRepository.Object.Table.FirstOrDefault(x => x.Id == id));
+            _giftCardRepository.Setup(r => r.GetById(It.IsAny<int>(), null)).Returns((int id, int? cacheTime) => _giftCardRepository.Object.Table.FirstOrDefault(x => x.Id == id));
 
             _giftCardRepository.Object.Insert(
                 new GiftCard

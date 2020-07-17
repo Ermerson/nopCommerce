@@ -5,9 +5,7 @@ using Nop.Core.Caching;
 using Nop.Core.Domain.Vendors;
 using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
-using Nop.Services.Events;
 
 namespace Nop.Services.Vendors
 {
@@ -18,24 +16,24 @@ namespace Nop.Services.Vendors
     {
         #region Fields
 
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<VendorAttribute> _vendorAttributeRepository;
         private readonly IRepository<VendorAttributeValue> _vendorAttributeValueRepository;
+        private readonly IStaticCacheManager _staticCacheManager;
 
         #endregion
 
         #region Ctor
 
-        public VendorAttributeService(ICacheKeyManager cacheKeyService,
-            IEventPublisher eventPublisher,
+        public VendorAttributeService(IEventPublisher eventPublisher,
             IRepository<VendorAttribute> vendorAttributeRepository,
-            IRepository<VendorAttributeValue> vendorAttributeValueRepository)
+            IRepository<VendorAttributeValue> vendorAttributeValueRepository,
+            IStaticCacheManager staticCacheManager)
         {
-            _cacheKeyService = cacheKeyService;
             _eventPublisher = eventPublisher;
             _vendorAttributeRepository = vendorAttributeRepository;
             _vendorAttributeValueRepository = vendorAttributeValueRepository;
+            _staticCacheManager = staticCacheManager;
         }
 
         #endregion
@@ -52,7 +50,7 @@ namespace Nop.Services.Vendors
         {
             return _vendorAttributeRepository.Table
                 .OrderBy(vendorAttribute => vendorAttribute.DisplayOrder).ThenBy(vendorAttribute => vendorAttribute.Id)
-                .ToCachedList(_cacheKeyService.PrepareKeyForDefaultCache(NopVendorDefaults.VendorAttributesAllCacheKey));
+                .ToCachedList(_staticCacheManager.PrepareKeyForDefaultCache(NopVendorDefaults.VendorAttributesAllCacheKey));
         }
 
         /// <summary>
@@ -124,7 +122,7 @@ namespace Nop.Services.Vendors
         /// <returns>Vendor attribute values</returns>
         public virtual IList<VendorAttributeValue> GetVendorAttributeValues(int vendorAttributeId)
         {
-            var key = _cacheKeyService.PrepareKeyForDefaultCache(NopVendorDefaults.VendorAttributeValuesAllCacheKey, vendorAttributeId);
+            var key = _staticCacheManager.PrepareKeyForDefaultCache(NopVendorDefaults.VendorAttributeValuesAllCacheKey, vendorAttributeId);
 
             return _vendorAttributeValueRepository.Table
                 .Where(vendorAttributeValue => vendorAttributeValue.VendorAttributeId == vendorAttributeId)

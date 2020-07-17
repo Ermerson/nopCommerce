@@ -12,10 +12,8 @@ using Nop.Core.Domain.Media;
 using Nop.Core.Events;
 using Nop.Core.Infrastructure;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Catalog;
 using Nop.Services.Configuration;
-using Nop.Services.Events;
 using Nop.Services.Seo;
 
 namespace Nop.Services.Media
@@ -33,7 +31,6 @@ namespace Nop.Services.Media
         private static string _azureBlobStorageConnectionString;
         private static string _azureBlobStorageContainerName;
         private static string _azureBlobStorageEndPoint;
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IStaticCacheManager _staticCacheManager;
         private readonly MediaSettings _mediaSettings;
         private readonly object _locker = new object();
@@ -44,7 +41,6 @@ namespace Nop.Services.Media
 
         public AzurePictureService(INopDataProvider dataProvider,
             IDownloadService downloadService,
-            ICacheKeyManager cacheKeyService,
             IEventPublisher eventPublisher,
             IHttpContextAccessor httpContextAccessor,
             INopFileProvider fileProvider,
@@ -72,7 +68,6 @@ namespace Nop.Services.Media
                   webHelper,
                   mediaSettings)
         {
-            _cacheKeyService = cacheKeyService;
             _staticCacheManager = staticCacheManager;
             _mediaSettings = mediaSettings;
 
@@ -227,7 +222,7 @@ namespace Nop.Services.Media
         {
             try
             {
-                var key = _cacheKeyService.PrepareKeyForDefaultCache(NopMediaDefaults.ThumbExistsCacheKey, thumbFileName);
+                var key = _staticCacheManager.PrepareKeyForDefaultCache(NopMediaDefaults.ThumbExistsCacheKey, thumbFileName);
 
                 return await _staticCacheManager.GetAsync(key, async () =>
                 {

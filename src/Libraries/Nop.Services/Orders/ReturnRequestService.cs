@@ -6,9 +6,7 @@ using Nop.Core.Caching;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
-using Nop.Services.Events;
 
 namespace Nop.Services.Orders
 {
@@ -19,27 +17,27 @@ namespace Nop.Services.Orders
     {
         #region Fields
 
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<ReturnRequest> _returnRequestRepository;
         private readonly IRepository<ReturnRequestAction> _returnRequestActionRepository;
         private readonly IRepository<ReturnRequestReason> _returnRequestReasonRepository;
+        private readonly IStaticCacheManager _staticCacheManager;
 
         #endregion
 
         #region Ctor
 
-        public ReturnRequestService(ICacheKeyManager cacheKeyService,
-            IEventPublisher eventPublisher,
+        public ReturnRequestService(IEventPublisher eventPublisher,
             IRepository<ReturnRequest> returnRequestRepository,
             IRepository<ReturnRequestAction> returnRequestActionRepository,
-            IRepository<ReturnRequestReason> returnRequestReasonRepository)
+            IRepository<ReturnRequestReason> returnRequestReasonRepository,
+            IStaticCacheManager staticCacheManager)
         {
-            _cacheKeyService = cacheKeyService;
             _eventPublisher = eventPublisher;
             _returnRequestRepository = returnRequestRepository;
             _returnRequestActionRepository = returnRequestActionRepository;
             _returnRequestReasonRepository = returnRequestReasonRepository;
+            _staticCacheManager = staticCacheManager;
         }
 
         #endregion
@@ -146,7 +144,7 @@ namespace Nop.Services.Orders
                         orderby rra.DisplayOrder, rra.Id
                         select rra;
 
-            return query.ToCachedList(_cacheKeyService.PrepareKeyForDefaultCache(NopOrderDefaults.ReturnRequestActionAllCacheKey));
+            return query.ToCachedList(_staticCacheManager.PrepareKeyForDefaultCache(NopOrderDefaults.ReturnRequestActionAllCacheKey));
         }
 
         /// <summary>
@@ -247,7 +245,7 @@ namespace Nop.Services.Orders
                         orderby rra.DisplayOrder, rra.Id
                         select rra;
 
-            return query.ToCachedList(_cacheKeyService.PrepareKeyForDefaultCache(NopOrderDefaults.ReturnRequestReasonAllCacheKey));
+            return query.ToCachedList(_staticCacheManager.PrepareKeyForDefaultCache(NopOrderDefaults.ReturnRequestReasonAllCacheKey));
         }
 
         /// <summary>

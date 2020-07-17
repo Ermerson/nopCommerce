@@ -10,13 +10,11 @@ using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Catalog;
 using Nop.Services.Common;
 using Nop.Services.Customers;
 using Nop.Services.Directory;
-using Nop.Services.Events;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Orders;
@@ -32,7 +30,6 @@ namespace Nop.Services.Shipping
         #region Fields
 
         private readonly IAddressService _addressService;
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICheckoutAttributeParser _checkoutAttributeParser;
         private readonly ICountryService _countryService;
         private readonly ICustomerService _customerService;
@@ -49,6 +46,7 @@ namespace Nop.Services.Shipping
         private readonly IRepository<Warehouse> _warehouseRepository;
         private readonly IShippingPluginManager _shippingPluginManager;
         private readonly IStateProvinceService _stateProvinceService;
+        private readonly IStaticCacheManager _staticCacheManager;
         private readonly IStoreContext _storeContext;
         private readonly ShippingSettings _shippingSettings;
         private readonly ShoppingCartSettings _shoppingCartSettings;
@@ -58,7 +56,6 @@ namespace Nop.Services.Shipping
         #region Ctor
 
         public ShippingService(IAddressService addressService,
-            ICacheKeyManager cacheKeyService,
             ICheckoutAttributeParser checkoutAttributeParser,
             ICountryService countryService,
             ICustomerService customerService,
@@ -75,12 +72,12 @@ namespace Nop.Services.Shipping
             IRepository<Warehouse> warehouseRepository,
             IShippingPluginManager shippingPluginManager,
             IStateProvinceService stateProvinceService,
+            IStaticCacheManager staticCacheManager,
             IStoreContext storeContext,
             ShippingSettings shippingSettings,
             ShoppingCartSettings shoppingCartSettings)
         {
             _addressService = addressService;
-            _cacheKeyService = cacheKeyService;
             _checkoutAttributeParser = checkoutAttributeParser;
             _countryService = countryService;
             _customerService = customerService;
@@ -97,6 +94,7 @@ namespace Nop.Services.Shipping
             _warehouseRepository = warehouseRepository;
             _shippingPluginManager = shippingPluginManager;
             _stateProvinceService = stateProvinceService;
+            _staticCacheManager = staticCacheManager;
             _storeContext = storeContext;
             _shippingSettings = shippingSettings;
             _shoppingCartSettings = shoppingCartSettings;
@@ -182,7 +180,7 @@ namespace Nop.Services.Shipping
         /// <returns>Shipping methods</returns>
         public virtual IList<ShippingMethod> GetAllShippingMethods(int? filterByCountryId = null)
         {
-            var key = _cacheKeyService.PrepareKeyForDefaultCache(NopShippingDefaults.ShippingMethodsAllCacheKey, filterByCountryId);
+            var key = _staticCacheManager.PrepareKeyForDefaultCache(NopShippingDefaults.ShippingMethodsAllCacheKey, filterByCountryId);
             
             if (filterByCountryId.HasValue && filterByCountryId.Value > 0)
             {
@@ -343,7 +341,7 @@ namespace Nop.Services.Shipping
                         orderby wh.Name
                         select wh;
 
-            var warehouses = query.ToCachedList(_cacheKeyService.PrepareKeyForDefaultCache(NopShippingDefaults.WarehousesAllCacheKey));
+            var warehouses = query.ToCachedList(_staticCacheManager.PrepareKeyForDefaultCache(NopShippingDefaults.WarehousesAllCacheKey));
 
             if (!string.IsNullOrEmpty(name))
             {

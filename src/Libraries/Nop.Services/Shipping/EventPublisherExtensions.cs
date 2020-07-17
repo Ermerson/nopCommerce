@@ -1,6 +1,5 @@
 ﻿using Nop.Core.Domain.Shipping;
 using Nop.Core.Events;
-using Nop.Services.Events;
 
 namespace Nop.Services.Shipping
 {

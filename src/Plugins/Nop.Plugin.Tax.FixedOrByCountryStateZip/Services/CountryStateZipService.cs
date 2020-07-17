@@ -16,7 +16,6 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Services
     {
         #region Fields
 
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<TaxRate> _taxRateRepository;
         private readonly IStaticCacheManager _staticCacheManager;
@@ -28,16 +27,13 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Services
         /// <summary>
         /// Ctor
         /// </summary>
-        /// <param name="cacheKeyService">Cache key service</param>
         /// <param name="eventPublisher">Event publisher</param>
         /// <param name="staticCacheManager">Cache manager</param>
         /// <param name="taxRateRepository">Tax rate repository</param>
-        public CountryStateZipService(ICacheKeyManager cacheKeyService,
-            IEventPublisher eventPublisher,            
+        public CountryStateZipService(IEventPublisher eventPublisher,            
             IRepository<TaxRate> taxRateRepository,
             IStaticCacheManager staticCacheManager)
         {
-            _cacheKeyService = cacheKeyService;
             _eventPublisher = eventPublisher;            
             _taxRateRepository = taxRateRepository;
             _staticCacheManager = staticCacheManager;
@@ -68,7 +64,7 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Services
         /// <returns>Tax rates</returns>
         public virtual IPagedList<TaxRate> GetAllTaxRates(int pageIndex = 0, int pageSize = int.MaxValue)
         {
-            var key = _cacheKeyService.PrepareKeyForShortTermCache(ModelCacheEventConsumer.TAXRATE_ALL_KEY);
+            var key = _staticCacheManager.PrepareKeyForShortTermCache(ModelCacheEventConsumer.TAXRATE_ALL_KEY);
             var rez = _staticCacheManager.Get(key, () =>
             {
                 var query = from tr in _taxRateRepository.Table

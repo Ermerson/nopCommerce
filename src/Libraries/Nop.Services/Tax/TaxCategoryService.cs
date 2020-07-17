@@ -5,9 +5,7 @@ using Nop.Core.Caching;
 using Nop.Core.Domain.Tax;
 using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
-using Nop.Services.Events;
 
 namespace Nop.Services.Tax
 {
@@ -18,21 +16,21 @@ namespace Nop.Services.Tax
     {
         #region Fields
 
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<TaxCategory> _taxCategoryRepository;
+        private readonly IStaticCacheManager _staticCacheManager;
 
         #endregion
 
         #region Ctor
 
-        public TaxCategoryService(ICacheKeyManager cacheKeyService,
-            IEventPublisher eventPublisher,
-            IRepository<TaxCategory> taxCategoryRepository)
+        public TaxCategoryService(IEventPublisher eventPublisher,
+            IRepository<TaxCategory> taxCategoryRepository,
+            IStaticCacheManager staticCacheManager)
         {
-            _cacheKeyService = cacheKeyService;
             _eventPublisher = eventPublisher;
             _taxCategoryRepository = taxCategoryRepository;
+            _staticCacheManager = staticCacheManager;
         }
 
         #endregion
@@ -64,7 +62,7 @@ namespace Nop.Services.Tax
                 orderby tc.DisplayOrder, tc.Id
                 select tc;
 
-            var taxCategories = query.ToCachedList(_cacheKeyService.PrepareKeyForDefaultCache(NopTaxDefaults.TaxCategoriesAllCacheKey));
+            var taxCategories = query.ToCachedList(_staticCacheManager.PrepareKeyForDefaultCache(NopTaxDefaults.TaxCategoriesAllCacheKey));
 
             return taxCategories;
         }

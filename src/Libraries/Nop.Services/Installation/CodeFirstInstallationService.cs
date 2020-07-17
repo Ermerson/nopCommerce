@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Nop.Core;
-using Nop.Core.Caching;
 using Nop.Core.Domain;
 using Nop.Core.Domain.Affiliates;
 using Nop.Core.Domain.Blogs;
@@ -36,7 +35,6 @@ using Nop.Core.Infrastructure;
 using Nop.Core.Security;
 using Nop.Data;
 using Nop.Services.Blogs;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Common;
 using Nop.Services.Configuration;
 using Nop.Services.Customers;
@@ -6812,13 +6810,6 @@ namespace Nop.Services.Installation
                 CompareProductsCookieExpires = 24 * 10,
                 RecentlyViewedProductsCookieExpires = 24 * 10,
                 CustomerCookieExpires = 24 * 365
-            });
-
-            settingService.SaveSetting(new CachingSettings
-            {
-                ShortTermCacheTime = 5,
-                DefaultCacheTime = NopCachingDefaults.CacheTime,
-                BundledFilesCacheTime = 120
             });
         }
 

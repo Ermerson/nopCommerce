@@ -5,9 +5,7 @@ using Nop.Core.Caching;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
-using Nop.Services.Events;
 
 namespace Nop.Services.Shipping.Date
 {
@@ -18,24 +16,24 @@ namespace Nop.Services.Shipping.Date
     {
         #region Fields
 
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<DeliveryDate> _deliveryDateRepository;
         private readonly IRepository<ProductAvailabilityRange> _productAvailabilityRangeRepository;
+        private readonly IStaticCacheManager _staticCacheManager;
 
         #endregion
 
         #region Ctor
 
-        public DateRangeService(ICacheKeyManager cacheKeyService,
-            IEventPublisher eventPublisher,
+        public DateRangeService(IEventPublisher eventPublisher,
             IRepository<DeliveryDate> deliveryDateRepository,
-            IRepository<ProductAvailabilityRange> productAvailabilityRangeRepository)
+            IRepository<ProductAvailabilityRange> productAvailabilityRangeRepository,
+            IStaticCacheManager staticCacheManager)
         {
-            _cacheKeyService = cacheKeyService;
             _eventPublisher = eventPublisher;
             _deliveryDateRepository = deliveryDateRepository;
             _productAvailabilityRangeRepository = productAvailabilityRangeRepository;
+            _staticCacheManager = staticCacheManager;
         }
 
         #endregion
@@ -66,7 +64,7 @@ namespace Nop.Services.Shipping.Date
             var query = from dd in _deliveryDateRepository.Table
                         orderby dd.DisplayOrder, dd.Id
                         select dd;
-            var deliveryDates = query.ToCachedList(_cacheKeyService.PrepareKeyForDefaultCache(NopShippingDefaults.DeliveryDatesAllCacheKey));
+            var deliveryDates = query.ToCachedList(_staticCacheManager.PrepareKeyForDefaultCache(NopShippingDefaults.DeliveryDatesAllCacheKey));
 
             return deliveryDates;
         }
@@ -140,7 +138,7 @@ namespace Nop.Services.Shipping.Date
                         orderby par.DisplayOrder, par.Id
                         select par;
 
-            return query.ToCachedList(_cacheKeyService.PrepareKeyForDefaultCache(NopShippingDefaults.ProductAvailabilityAllCacheKey));
+            return query.ToCachedList(_staticCacheManager.PrepareKeyForDefaultCache(NopShippingDefaults.ProductAvailabilityAllCacheKey));
         }
 
         /// <summary>

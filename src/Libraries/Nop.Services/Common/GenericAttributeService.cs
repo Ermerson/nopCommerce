@@ -5,11 +5,8 @@ using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Common;
 using Nop.Core.Events;
-using Nop.Core.Infrastructure;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
-using Nop.Services.Events;
 
 namespace Nop.Services.Common
 {
@@ -22,16 +19,19 @@ namespace Nop.Services.Common
 
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<GenericAttribute> _genericAttributeRepository;
+        private readonly IStaticCacheManager _staticCacheManager;
 
         #endregion
 
         #region Ctor
 
         public GenericAttributeService(IEventPublisher eventPublisher,
-            IRepository<GenericAttribute> genericAttributeRepository)
+            IRepository<GenericAttribute> genericAttributeRepository,
+            IStaticCacheManager staticCacheManager)
         {
             _eventPublisher = eventPublisher;
             _genericAttributeRepository = genericAttributeRepository;
+            _staticCacheManager = staticCacheManager;
         }
 
         #endregion
@@ -126,8 +126,7 @@ namespace Nop.Services.Common
         {
             //we cannot inject ICacheKeyService into constructor because it'll cause circular references.
             //that's why we resolve it here this way
-            var key = EngineContext.Current.Resolve<ICacheKeyManager>()
-                .PrepareKeyForShortTermCache(NopCommonDefaults.GenericAttributeCacheKey, entityId, keyGroup);
+            var key = _staticCacheManager.PrepareKeyForShortTermCache(NopCommonDefaults.GenericAttributeCacheKey, entityId, keyGroup);
             
             var query = from ga in _genericAttributeRepository.Table
                 where ga.EntityId == entityId &&

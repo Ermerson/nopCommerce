@@ -81,10 +81,10 @@ namespace Nop.Services.Tests.Catalog
             var pluginService = new FakePluginService();
             _exchangeRatePluginManager = new ExchangeRatePluginManager(_currencySettings, new Mock<ICustomerService>().Object, pluginService);
             _currencyService = new CurrencyService(_currencySettings,
-                new FakeCacheKeyService(),
                 null,
                 _exchangeRatePluginManager,
                 _currencyRepo.Object,
+                new TestCacheManager(), 
                 _storeMappingService.Object);
 
             _taxSettings = new TaxSettings();

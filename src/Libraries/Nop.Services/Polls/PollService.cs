@@ -6,8 +6,6 @@ using Nop.Core.Domain.Polls;
 using Nop.Core.Domain.Stores;
 using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
-using Nop.Services.Events;
 
 namespace Nop.Services.Polls
 {

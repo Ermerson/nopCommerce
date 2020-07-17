@@ -7,9 +7,7 @@ using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Logging;
 using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
-using Nop.Services.Events;
 
 namespace Nop.Services.Logging
 {
@@ -20,10 +18,10 @@ namespace Nop.Services.Logging
     {
         #region Fields
 
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<ActivityLog> _activityLogRepository;
         private readonly IRepository<ActivityLogType> _activityLogTypeRepository;
+        private readonly IStaticCacheManager _staticCacheManager;
         private readonly IWebHelper _webHelper;
         private readonly IWorkContext _workContext;
 
@@ -31,17 +29,17 @@ namespace Nop.Services.Logging
 
         #region Ctor
 
-        public CustomerActivityService(ICacheKeyManager cacheKeyService,
-            IEventPublisher eventPublisher,
+        public CustomerActivityService(IEventPublisher eventPublisher,
             IRepository<ActivityLog> activityLogRepository,
             IRepository<ActivityLogType> activityLogTypeRepository,
+            IStaticCacheManager staticCacheManager,
             IWebHelper webHelper,
             IWorkContext workContext)
         {
-            _cacheKeyService = cacheKeyService;
             _eventPublisher = eventPublisher;
             _activityLogRepository = activityLogRepository;
             _activityLogTypeRepository = activityLogTypeRepository;
+            _staticCacheManager = staticCacheManager;
             _webHelper = webHelper;
             _workContext = workContext;
         }
@@ -104,7 +102,7 @@ namespace Nop.Services.Logging
             var query = from alt in _activityLogTypeRepository.Table
                         orderby alt.Name
                         select alt;
-            var activityLogTypes = query.ToCachedList(_cacheKeyService.PrepareKeyForDefaultCache(NopLoggingDefaults.ActivityTypeAllCacheKey));
+            var activityLogTypes = query.ToCachedList(_staticCacheManager.PrepareKeyForDefaultCache(NopLoggingDefaults.ActivityTypeAllCacheKey));
 
             return activityLogTypes;
         }

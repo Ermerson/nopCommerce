@@ -37,7 +37,7 @@ namespace Nop.Services.Tests.Seo
             _localizationSettings = new LocalizationSettings();
             _seoSettings = new SeoSettings();
 
-            _urlRecordService = new UrlRecordService(new FakeCacheKeyService(), _eventPublisher.Object, _languageService.Object, _urlRecordRepository.Object,
+            _urlRecordService = new UrlRecordService(_eventPublisher.Object, _languageService.Object, _urlRecordRepository.Object,
                 _staticCacheManager.Object, _workContext.Object, _localizationSettings, _seoSettings);
         }
 

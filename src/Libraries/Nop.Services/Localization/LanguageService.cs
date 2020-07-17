@@ -6,10 +6,7 @@ using Nop.Core.Caching;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Configuration;
-using Nop.Services.Events;
 using Nop.Services.Stores;
 
 namespace Nop.Services.Localization
@@ -21,7 +18,6 @@ namespace Nop.Services.Localization
     {
         #region Fields
 
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<Language> _languageRepository;
         private readonly ISettingService _settingService;
@@ -33,15 +29,13 @@ namespace Nop.Services.Localization
 
         #region Ctor
 
-        public LanguageService(ICacheKeyManager cacheKeyService,
-            IEventPublisher eventPublisher,
+        public LanguageService(IEventPublisher eventPublisher,
             IRepository<Language> languageRepository,
             ISettingService settingService,
             IStaticCacheManager staticCacheManager,
             IStoreMappingService storeMappingService,
             LocalizationSettings localizationSettings)
         {
-            _cacheKeyService = cacheKeyService;
             _eventPublisher = eventPublisher;
             _languageRepository = languageRepository;
             _settingService = settingService;
@@ -96,7 +90,7 @@ namespace Nop.Services.Localization
             query = query.OrderBy(l => l.DisplayOrder).ThenBy(l => l.Id);
 
             //cacheable copy
-            var key = _cacheKeyService.PrepareKeyForDefaultCache(NopLocalizationDefaults.LanguagesAllCacheKey, storeId, showHidden);
+            var key = _staticCacheManager.PrepareKeyForDefaultCache(NopLocalizationDefaults.LanguagesAllCacheKey, storeId, showHidden);
             
             var languages = _staticCacheManager.Get(key, () =>
             {

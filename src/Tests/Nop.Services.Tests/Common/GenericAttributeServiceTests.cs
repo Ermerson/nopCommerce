@@ -2,6 +2,7 @@
 using Moq;
 using Nop.Core.Events;
 using Nop.Services.Common;
+using Nop.Tests;
 using NUnit.Framework;
 
 namespace Nop.Services.Tests.Common
@@ -21,7 +22,8 @@ namespace Nop.Services.Tests.Common
 
             _genericAttributeService = new GenericAttributeService(
                 _eventPublisher.Object,
-                _repository.Object
+                _repository.Object,
+                new TestCacheManager()
             );
         }
 

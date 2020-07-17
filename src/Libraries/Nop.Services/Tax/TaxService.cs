@@ -14,7 +14,6 @@ using Nop.Core.Events;
 using Nop.Services.Common;
 using Nop.Services.Customers;
 using Nop.Services.Directory;
-using Nop.Services.Events;
 using Nop.Services.Logging;
 using Nop.Services.Tax.Events;
 

@@ -6,7 +6,6 @@ using Nop.Core.Domain.Orders;
 using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching.Extensions;
-using Nop.Services.Events;
 using Nop.Services.Stores;
 
 namespace Nop.Services.Orders
@@ -18,7 +17,6 @@ namespace Nop.Services.Orders
     {
         #region Fields
 
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IStaticCacheManager _staticCacheManager;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<CheckoutAttribute> _checkoutAttributeRepository;
@@ -29,14 +27,12 @@ namespace Nop.Services.Orders
 
         #region Ctor
 
-        public CheckoutAttributeService(ICacheKeyManager cacheKeyService,
-            IStaticCacheManager staticCacheManager,
+        public CheckoutAttributeService(IStaticCacheManager staticCacheManager,
             IEventPublisher eventPublisher,
             IRepository<CheckoutAttribute> checkoutAttributeRepository,
             IRepository<CheckoutAttributeValue> checkoutAttributeValueRepository,
             IStoreMappingService storeMappingService)
         {
-            _cacheKeyService = cacheKeyService;
             _staticCacheManager = staticCacheManager;
             _eventPublisher = eventPublisher;
             _checkoutAttributeRepository = checkoutAttributeRepository;
@@ -88,7 +84,7 @@ namespace Nop.Services.Orders
         /// <returns>Checkout attributes</returns>
         public virtual IList<CheckoutAttribute> GetAllCheckoutAttributes(int storeId = 0, bool excludeShippableAttributes = false)
         {
-            var key = _cacheKeyService.PrepareKeyForDefaultCache(NopOrderDefaults.CheckoutAttributesAllCacheKey, storeId, excludeShippableAttributes);
+            var key = _staticCacheManager.PrepareKeyForDefaultCache(NopOrderDefaults.CheckoutAttributesAllCacheKey, storeId, excludeShippableAttributes);
 
             return _staticCacheManager.Get(key, () =>
             {
@@ -192,7 +188,7 @@ namespace Nop.Services.Orders
         /// <returns>Checkout attribute values</returns>
         public virtual IList<CheckoutAttributeValue> GetCheckoutAttributeValues(int checkoutAttributeId)
         {
-            var key = _cacheKeyService.PrepareKeyForDefaultCache(NopOrderDefaults.CheckoutAttributeValuesAllCacheKey, checkoutAttributeId);
+            var key = _staticCacheManager.PrepareKeyForDefaultCache(NopOrderDefaults.CheckoutAttributeValuesAllCacheKey, checkoutAttributeId);
 
             var query = from cav in _checkoutAttributeValueRepository.Table
                 orderby cav.DisplayOrder, cav.Id

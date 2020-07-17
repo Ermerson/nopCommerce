@@ -5,9 +5,7 @@ using Nop.Core.Caching;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
-using Nop.Services.Events;
 
 namespace Nop.Services.Catalog
 {
@@ -18,24 +16,24 @@ namespace Nop.Services.Catalog
     {
         #region Fields
 
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<ProductReviewReviewTypeMapping> _productReviewReviewTypeMappingRepository;
         private readonly IRepository<ReviewType> _reviewTypeRepository;
+        private readonly IStaticCacheManager _staticCacheManager;
 
         #endregion
 
         #region Ctor
 
-        public ReviewTypeService(ICacheKeyManager cacheKeyService,
-            IEventPublisher eventPublisher,
+        public ReviewTypeService(IEventPublisher eventPublisher,
             IRepository<ProductReviewReviewTypeMapping> productReviewReviewTypeMappingRepository,
-            IRepository<ReviewType> reviewTypeRepository)
+            IRepository<ReviewType> reviewTypeRepository,
+            IStaticCacheManager staticCacheManager)
         {
-            _cacheKeyService = cacheKeyService;
             _eventPublisher = eventPublisher;
             _productReviewReviewTypeMappingRepository = productReviewReviewTypeMappingRepository;
             _reviewTypeRepository = reviewTypeRepository;
+            _staticCacheManager = staticCacheManager;
         }
 
         #endregion
@@ -52,7 +50,7 @@ namespace Nop.Services.Catalog
         {
             return _reviewTypeRepository.Table
                 .OrderBy(reviewType => reviewType.DisplayOrder).ThenBy(reviewType => reviewType.Id)
-                .ToCachedList(_cacheKeyService.PrepareKeyForDefaultCache(NopCatalogDefaults.ReviewTypeAllCacheKey));
+                .ToCachedList(_staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.ReviewTypeAllCacheKey));
         }
 
         /// <summary>
@@ -125,7 +123,7 @@ namespace Nop.Services.Catalog
         public IList<ProductReviewReviewTypeMapping> GetProductReviewReviewTypeMappingsByProductReviewId(
             int productReviewId)
         {
-            var key = _cacheKeyService.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductReviewReviewTypeMappingAllCacheKey, productReviewId);
+            var key = _staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductReviewReviewTypeMappingAllCacheKey, productReviewId);
 
             var query = from pam in _productReviewReviewTypeMappingRepository.Table
                 orderby pam.Id

@@ -8,7 +8,6 @@ using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Customers;
-using Nop.Services.Events;
 using Nop.Services.Seo;
 
 namespace Nop.Services.Catalog
@@ -21,7 +20,6 @@ namespace Nop.Services.Catalog
         #region Fields
 
         private readonly CatalogSettings _catalogSettings;
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICustomerService _customerService;
         private readonly INopDataProvider _dataProvider;
         private readonly IEventPublisher _eventPublisher;
@@ -36,7 +34,6 @@ namespace Nop.Services.Catalog
         #region Ctor
 
         public ProductTagService(CatalogSettings catalogSettings,
-            ICacheKeyManager cacheKeyService,
             ICustomerService customerService,
             INopDataProvider dataProvider,
             IEventPublisher eventPublisher,
@@ -47,7 +44,6 @@ namespace Nop.Services.Catalog
             IWorkContext workContext)
         {
             _catalogSettings = catalogSettings;
-            _cacheKeyService = cacheKeyService;
             _customerService = customerService;
             _dataProvider = dataProvider;
             _eventPublisher = eventPublisher;
@@ -96,7 +92,7 @@ namespace Nop.Services.Catalog
                 allowedCustomerRolesIds = string.Join(",", _customerService.GetCustomerRoleIds(_workContext.CurrentCustomer));
             }
 
-            var key = _cacheKeyService.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductTagCountCacheKey, storeId, 
+            var key = _staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductTagCountCacheKey, storeId, 
                 _customerService.GetCustomerRoleIds(_workContext.CurrentCustomer), 
                 showHidden);
            
@@ -157,7 +153,7 @@ namespace Nop.Services.Catalog
         {
             var query = _productTagRepository.Table;
             
-            var allProductTags = query.ToCachedList(_cacheKeyService.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductTagAllCacheKey));
+            var allProductTags = query.ToCachedList(_staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductTagAllCacheKey));
 
             if(!string.IsNullOrEmpty(tagName))
             {
@@ -174,7 +170,7 @@ namespace Nop.Services.Catalog
         /// <returns>Product tags</returns>
         public virtual IList<ProductTag> GetAllProductTagsByProductId(int productId)
         {
-            var key = _cacheKeyService.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductTagAllByProductIdCacheKey, productId);
+            var key = _staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductTagAllByProductIdCacheKey, productId);
 
             var query = from pt in _productTagRepository.Table
                 join ppt in _productProductTagMappingRepository.Table on pt.Id equals ppt.ProductTagId

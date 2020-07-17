@@ -5,9 +5,7 @@ using Nop.Core.Caching;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
-using Nop.Services.Events;
 
 namespace Nop.Services.Catalog
 {
@@ -18,21 +16,21 @@ namespace Nop.Services.Catalog
     {
         #region Fields
 
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<ProductTemplate> _productTemplateRepository;
+        private readonly IStaticCacheManager _staticCacheManager;
 
         #endregion
 
         #region Ctor
 
-        public ProductTemplateService(ICacheKeyManager cacheKeyService,
-        IEventPublisher eventPublisher,
-            IRepository<ProductTemplate> productTemplateRepository)
+        public ProductTemplateService(IEventPublisher eventPublisher,
+            IRepository<ProductTemplate> productTemplateRepository,
+            IStaticCacheManager staticCacheManager)
         {
-            _cacheKeyService = cacheKeyService;
             _eventPublisher = eventPublisher;
             _productTemplateRepository = productTemplateRepository;
+            _staticCacheManager = staticCacheManager;
         }
 
         #endregion
@@ -64,7 +62,7 @@ namespace Nop.Services.Catalog
                         orderby pt.DisplayOrder, pt.Id
                         select pt;
 
-            var templates = query.ToCachedList(_cacheKeyService.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductTemplatesAllCacheKey));
+            var templates = query.ToCachedList(_staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductTemplatesAllCacheKey));
 
             return templates;
         }

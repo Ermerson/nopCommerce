@@ -7,7 +7,6 @@ using Nop.Core.Domain.Vendors;
 using Nop.Core.Events;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Events;
 
 namespace Nop.Services.Vendors
 {

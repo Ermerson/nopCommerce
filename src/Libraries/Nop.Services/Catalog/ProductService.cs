@@ -17,7 +17,6 @@ using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Customers;
-using Nop.Services.Events;
 using Nop.Services.Localization;
 using Nop.Services.Messages;
 using Nop.Services.Security;
@@ -36,7 +35,6 @@ namespace Nop.Services.Catalog
         protected readonly CatalogSettings _catalogSettings;
         protected readonly CommonSettings _commonSettings;
         protected readonly IAclService _aclService;
-        protected readonly ICacheKeyManager _cacheKeyService;
         protected readonly ICustomerService _customerService;
         protected readonly INopDataProvider _dataProvider;
         protected readonly IDateRangeService _dateRangeService;
@@ -75,7 +73,6 @@ namespace Nop.Services.Catalog
         public ProductService(CatalogSettings catalogSettings,
             CommonSettings commonSettings,
             IAclService aclService,
-            ICacheKeyManager cacheKeyService,
             ICustomerService customerService,
             INopDataProvider dataProvider,
             IDateRangeService dateRangeService,
@@ -110,7 +107,6 @@ namespace Nop.Services.Catalog
             _catalogSettings = catalogSettings;
             _commonSettings = commonSettings;
             _aclService = aclService;
-            _cacheKeyService = cacheKeyService;
             _customerService = customerService;
             _dataProvider = dataProvider;
             _dateRangeService = dateRangeService;
@@ -360,7 +356,7 @@ namespace Nop.Services.Catalog
                         p.ShowOnHomepage
                         select p;
 
-            var products = query.ToCachedList(_cacheKeyService.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductsAllDisplayedOnHomepageCacheKey));
+            var products = query.ToCachedList(_staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductsAllDisplayedOnHomepageCacheKey));
 
             return products;
         }
@@ -492,7 +488,7 @@ namespace Nop.Services.Catalog
                         select p;
             }
 
-            var cacheKey = _cacheKeyService.PrepareKeyForDefaultCache(NopCatalogDefaults.CategoryNumberOfProductsCacheKey,
+            var cacheKey = _staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.CategoryNumberOfProductsCacheKey,
                 allowedCustomerRolesIds, storeId, categoryIds);
 
             //only distinct products
@@ -1731,7 +1727,7 @@ namespace Nop.Services.Catalog
                         orderby rp.DisplayOrder, rp.Id
                         select rp;
 
-            var relatedProducts = query.ToCachedList(_cacheKeyService.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductsRelatedCacheKey, productId, showHidden));
+            var relatedProducts = query.ToCachedList(_staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductsRelatedCacheKey, productId, showHidden));
 
             return relatedProducts;
         }
@@ -1989,7 +1985,7 @@ namespace Nop.Services.Catalog
         public virtual IList<TierPrice> GetTierPricesByProduct(int productId)
         {
             return _tierPriceRepository.Table.Where(tp => tp.ProductId == productId)
-                .ToCachedList(_cacheKeyService.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductTierPricesCacheKey, productId));
+                .ToCachedList(_staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductTierPricesCacheKey, productId));
         }
 
         /// <summary>

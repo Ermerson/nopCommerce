@@ -8,8 +8,6 @@ using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
-using Nop.Services.Events;
 using Nop.Services.Shipping.Pickup;
 using Nop.Services.Shipping.Tracking;
 

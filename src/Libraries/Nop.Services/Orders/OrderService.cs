@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Nop.Core;
-using Nop.Core.Caching;
+using Nop.Core.Configuration;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
@@ -13,7 +13,6 @@ using Nop.Core.Events;
 using Nop.Core.Html;
 using Nop.Data;
 using Nop.Services.Catalog;
-using Nop.Services.Events;
 using Nop.Services.Shipping;
 
 namespace Nop.Services.Orders
@@ -25,7 +24,6 @@ namespace Nop.Services.Orders
     {
         #region Fields
 
-        private readonly CachingSettings _cachingSettings;
         private readonly IEventPublisher _eventPublisher;
         private readonly IProductService _productService;
         private readonly IRepository<Address> _addressRepository;
@@ -38,13 +36,13 @@ namespace Nop.Services.Orders
         private readonly IRepository<RecurringPayment> _recurringPaymentRepository;
         private readonly IRepository<RecurringPaymentHistory> _recurringPaymentHistoryRepository;
         private readonly IShipmentService _shipmentService;
+        private readonly NopConfig _nopConfig;
 
         #endregion
 
         #region Ctor
 
-        public OrderService(CachingSettings cachingSettings,
-            IEventPublisher eventPublisher,
+        public OrderService(IEventPublisher eventPublisher,
             IProductService productService,
             IRepository<Address> addressRepository,
             IRepository<Customer> customerRepository,
@@ -55,9 +53,9 @@ namespace Nop.Services.Orders
             IRepository<ProductWarehouseInventory> productWarehouseInventoryRepository,
             IRepository<RecurringPayment> recurringPaymentRepository,
             IRepository<RecurringPaymentHistory> recurringPaymentHistoryRepository,
-            IShipmentService shipmentService)
+            IShipmentService shipmentService,
+            NopConfig nopConfig)
         {
-            _cachingSettings = cachingSettings;
             _eventPublisher = eventPublisher;
             _productService = productService;
             _addressRepository = addressRepository;
@@ -70,6 +68,7 @@ namespace Nop.Services.Orders
             _recurringPaymentRepository = recurringPaymentRepository;
             _recurringPaymentHistoryRepository = recurringPaymentHistoryRepository;
             _shipmentService = shipmentService;
+            _nopConfig = nopConfig;
         }
 
         #endregion
@@ -88,7 +87,7 @@ namespace Nop.Services.Orders
             if (orderId == 0)
                 return null;
 
-            return _orderRepository.GetById(orderId, cacheTime: _cachingSettings.ShortTermCacheTime);
+            return _orderRepository.GetById(orderId, cacheTime: _nopConfig.ShortTermCacheTime);
         }
 
         /// <summary>
@@ -452,7 +451,7 @@ namespace Nop.Services.Orders
             if (orderItemId == 0)
                 return null;
 
-            return _orderItemRepository.GetById(orderItemId, cacheTime: _cachingSettings.ShortTermCacheTime);
+            return _orderItemRepository.GetById(orderItemId, cacheTime: _nopConfig.ShortTermCacheTime);
         }
 
         /// <summary>

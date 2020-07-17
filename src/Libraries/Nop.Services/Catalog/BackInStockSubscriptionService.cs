@@ -5,9 +5,7 @@ using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Common;
-using Nop.Services.Events;
 using Nop.Services.Messages;
 
 namespace Nop.Services.Catalog

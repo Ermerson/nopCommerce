@@ -24,7 +24,6 @@ namespace Nop.Services.Tests.FakeServices
     {
         public FakeShippingService(
             IAddressService addressService = null,
-            ICacheKeyManager cacheKeyService = null,
             ICheckoutAttributeParser checkoutAttributeParser = null,
             ICountryService countryService = null,
             ICustomerService customerSerice = null,
@@ -45,7 +44,6 @@ namespace Nop.Services.Tests.FakeServices
             ShippingSettings shippingSettings = null,
             ShoppingCartSettings shoppingCartSettings = null) : base(
                 addressService ?? new Mock<IAddressService>().Object,
-                cacheKeyService ?? new FakeCacheKeyService(),
                 checkoutAttributeParser ?? new Mock<ICheckoutAttributeParser>().Object,
                 countryService ?? new Mock<ICountryService>().Object,
                 customerSerice ?? new Mock<ICustomerService>().Object,
@@ -62,6 +60,7 @@ namespace Nop.Services.Tests.FakeServices
                 warehouseRepository.FakeRepoNullPropagation(),
                 shippingPluginManager ?? new Mock<IShippingPluginManager>().Object,
                 stateProvinceService ?? new Mock<IStateProvinceService>().Object,
+                new TestCacheManager(), 
                 storeContext ?? new Mock<IStoreContext>().Object,
                 shippingSettings ?? new ShippingSettings(),
                 shoppingCartSettings ?? new ShoppingCartSettings())

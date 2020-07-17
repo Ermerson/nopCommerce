@@ -114,16 +114,16 @@ namespace Nop.Services.Tests.Orders
 
             _checkoutAttributeRepo = new Mock<IRepository<CheckoutAttribute>>();
             _checkoutAttributeRepo.Setup(x => x.Table).Returns(new List<CheckoutAttribute> { ca1, ca2, ca3 }.AsQueryable());
-            _checkoutAttributeRepo.Setup(x => x.GetById(ca1.Id, true, null)).Returns(ca1);
-            _checkoutAttributeRepo.Setup(x => x.GetById(ca2.Id, true, null)).Returns(ca2);
-            _checkoutAttributeRepo.Setup(x => x.GetById(ca3.Id, true, null)).Returns(ca3);
+            _checkoutAttributeRepo.Setup(x => x.GetById(ca1.Id, null)).Returns(ca1);
+            _checkoutAttributeRepo.Setup(x => x.GetById(ca2.Id, null)).Returns(ca2);
+            _checkoutAttributeRepo.Setup(x => x.GetById(ca3.Id, null)).Returns(ca3);
 
             _checkoutAttributeValueRepo = new Mock<IRepository<CheckoutAttributeValue>>();
             _checkoutAttributeValueRepo.Setup(x => x.Table).Returns(new List<CheckoutAttributeValue> { cav1_1, cav1_2, cav2_1, cav2_2 }.AsQueryable());
-            _checkoutAttributeValueRepo.Setup(x => x.GetById(cav1_1.Id, true, null)).Returns(cav1_1);
-            _checkoutAttributeValueRepo.Setup(x => x.GetById(cav1_2.Id, true, null)).Returns(cav1_2);
-            _checkoutAttributeValueRepo.Setup(x => x.GetById(cav2_1.Id, true, null)).Returns(cav2_1);
-            _checkoutAttributeValueRepo.Setup(x => x.GetById(cav2_2.Id, true, null)).Returns(cav2_2);
+            _checkoutAttributeValueRepo.Setup(x => x.GetById(cav1_1.Id, null)).Returns(cav1_1);
+            _checkoutAttributeValueRepo.Setup(x => x.GetById(cav1_2.Id, null)).Returns(cav1_2);
+            _checkoutAttributeValueRepo.Setup(x => x.GetById(cav2_1.Id, null)).Returns(cav2_1);
+            _checkoutAttributeValueRepo.Setup(x => x.GetById(cav2_2.Id, null)).Returns(cav2_2);
 
             var staticCacheManager = new TestCacheManager();
 
@@ -132,7 +132,7 @@ namespace Nop.Services.Tests.Orders
             _eventPublisher = new Mock<IEventPublisher>();
             _eventPublisher.Setup(x => x.Publish(It.IsAny<object>()));
 
-            _checkoutAttributeService = new CheckoutAttributeService(new FakeCacheKeyService(), staticCacheManager, _eventPublisher.Object,
+            _checkoutAttributeService = new CheckoutAttributeService(staticCacheManager, _eventPublisher.Object,
                 _checkoutAttributeRepo.Object, _checkoutAttributeValueRepo.Object, _storeMappingService.Object);
 
             _checkoutAttributeParser = new CheckoutAttributeParser(_checkoutAttributeService);

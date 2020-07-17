@@ -5,9 +5,7 @@ using Nop.Core.Caching;
 using Nop.Core.Domain.Common;
 using Nop.Core.Events;
 using Nop.Data;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
-using Nop.Services.Events;
 
 namespace Nop.Services.Common
 {
@@ -18,24 +16,24 @@ namespace Nop.Services.Common
     {
         #region Fields
 
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<AddressAttribute> _addressAttributeRepository;
         private readonly IRepository<AddressAttributeValue> _addressAttributeValueRepository;
+        private readonly IStaticCacheManager _staticCacheManager;
 
         #endregion
 
         #region Ctor
 
-        public AddressAttributeService(ICacheKeyManager cacheKeyService,
-            IEventPublisher eventPublisher,
+        public AddressAttributeService(IEventPublisher eventPublisher,
             IRepository<AddressAttribute> addressAttributeRepository,
-            IRepository<AddressAttributeValue> addressAttributeValueRepository)
+            IRepository<AddressAttributeValue> addressAttributeValueRepository,
+            IStaticCacheManager staticCacheManager)
         {
-            _cacheKeyService = cacheKeyService;
             _eventPublisher = eventPublisher;
             _addressAttributeRepository = addressAttributeRepository;
             _addressAttributeValueRepository = addressAttributeValueRepository;
+            _staticCacheManager = staticCacheManager;
         }
 
         #endregion
@@ -67,7 +65,7 @@ namespace Nop.Services.Common
                 orderby aa.DisplayOrder, aa.Id
                 select aa;
 
-            return query.ToCachedList(_cacheKeyService.PrepareKeyForDefaultCache(NopCommonDefaults.AddressAttributesAllCacheKey));
+            return query.ToCachedList(_staticCacheManager.PrepareKeyForDefaultCache(NopCommonDefaults.AddressAttributesAllCacheKey));
         }
 
         /// <summary>
@@ -135,7 +133,7 @@ namespace Nop.Services.Common
         /// <returns>Address attribute values</returns>
         public virtual IList<AddressAttributeValue> GetAddressAttributeValues(int addressAttributeId)
         {
-            var key = _cacheKeyService.PrepareKeyForDefaultCache(NopCommonDefaults.AddressAttributeValuesAllCacheKey, addressAttributeId);
+            var key = _staticCacheManager.PrepareKeyForDefaultCache(NopCommonDefaults.AddressAttributeValuesAllCacheKey, addressAttributeId);
 
             var query = from aav in _addressAttributeValueRepository.Table
                 orderby aav.DisplayOrder, aav.Id

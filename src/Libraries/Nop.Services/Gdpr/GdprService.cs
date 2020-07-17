@@ -9,12 +9,10 @@ using Nop.Core.Events;
 using Nop.Data;
 using Nop.Services.Authentication.External;
 using Nop.Services.Blogs;
-using Nop.Services.Caching;
 using Nop.Services.Caching.Extensions;
 using Nop.Services.Catalog;
 using Nop.Services.Common;
 using Nop.Services.Customers;
-using Nop.Services.Events;
 using Nop.Services.Forums;
 using Nop.Services.Messages;
 using Nop.Services.News;
@@ -33,7 +31,6 @@ namespace Nop.Services.Gdpr
         private readonly IAddressService _addressService;
         private readonly IBackInStockSubscriptionService _backInStockSubscriptionService;
         private readonly IBlogService _blogService;
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly ICustomerService _customerService;
         private readonly IExternalAuthenticationService _externalAuthenticationService;
         private readonly IEventPublisher _eventPublisher;
@@ -44,6 +41,7 @@ namespace Nop.Services.Gdpr
         private readonly IProductService _productService;
         private readonly IRepository<GdprConsent> _gdprConsentRepository;
         private readonly IRepository<GdprLog> _gdprLogRepository;
+        private readonly IStaticCacheManager _staticCacheManager;
         private readonly IShoppingCartService _shoppingCartService;
         private readonly IStoreService _storeService;
 
@@ -54,7 +52,6 @@ namespace Nop.Services.Gdpr
         public GdprService(IAddressService addressService,
             IBackInStockSubscriptionService backInStockSubscriptionService,
             IBlogService blogService,
-            ICacheKeyManager cacheKeyService,
             ICustomerService customerService,
             IExternalAuthenticationService externalAuthenticationService,
             IEventPublisher eventPublisher,
@@ -65,13 +62,13 @@ namespace Nop.Services.Gdpr
             IProductService productService,
             IRepository<GdprConsent> gdprConsentRepository,
             IRepository<GdprLog> gdprLogRepository,
+            IStaticCacheManager staticCacheManager,
             IShoppingCartService shoppingCartService,
             IStoreService storeService)
         {
             _addressService = addressService;
             _backInStockSubscriptionService = backInStockSubscriptionService;
             _blogService = blogService;
-            _cacheKeyService = cacheKeyService;
             _customerService = customerService;
             _externalAuthenticationService = externalAuthenticationService;
             _eventPublisher = eventPublisher;
@@ -82,6 +79,7 @@ namespace Nop.Services.Gdpr
             _productService = productService;
             _gdprConsentRepository = gdprConsentRepository;
             _gdprLogRepository = gdprLogRepository;
+            _staticCacheManager = staticCacheManager;
             _shoppingCartService = shoppingCartService;
             _storeService = storeService;
         }
@@ -115,7 +113,7 @@ namespace Nop.Services.Gdpr
                         orderby c.DisplayOrder, c.Id
                         select c;
 
-            var gdprConsents = query.ToCachedList(_cacheKeyService.PrepareKeyForDefaultCache(NopGdprDefaults.ConsentsAllCacheKey));
+            var gdprConsents = query.ToCachedList(_staticCacheManager.PrepareKeyForDefaultCache(NopGdprDefaults.ConsentsAllCacheKey));
 
             return gdprConsents;
         }

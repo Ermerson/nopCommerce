@@ -28,7 +28,6 @@ namespace Nop.Plugin.Pickup.PickupInStore.Services
 
         #region Fields
 
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IRepository<StorePickupPoint> _storePickupPointRepository;
         private readonly IStaticCacheManager _staticCacheManager;
 
@@ -39,14 +38,11 @@ namespace Nop.Plugin.Pickup.PickupInStore.Services
         /// <summary>
         /// Ctor
         /// </summary>
-        /// <param name="cacheKeyService">Cache service</param>
         /// <param name="storePickupPointRepository">Store pickup point repository</param>
         /// <param name="staticCacheManager">Cache manager</param>
-        public StorePickupPointService(ICacheKeyManager cacheKeyService,
-            IRepository<StorePickupPoint> storePickupPointRepository,
+        public StorePickupPointService(IRepository<StorePickupPoint> storePickupPointRepository,
             IStaticCacheManager staticCacheManager)
         {
-            _cacheKeyService = cacheKeyService;
             _storePickupPointRepository = storePickupPointRepository;
             _staticCacheManager = staticCacheManager;
         }
@@ -64,7 +60,7 @@ namespace Nop.Plugin.Pickup.PickupInStore.Services
         /// <returns>Pickup points</returns>
         public virtual IPagedList<StorePickupPoint> GetAllStorePickupPoints(int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
         {
-            var key = _cacheKeyService.PrepareKeyForShortTermCache(_pickupPointAllKey, storeId);
+            var key = _staticCacheManager.PrepareKeyForShortTermCache(_pickupPointAllKey, storeId);
             var rez = _staticCacheManager.Get(key, () =>
             {
                 var query = _storePickupPointRepository.Table;

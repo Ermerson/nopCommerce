@@ -18,7 +18,6 @@ namespace Nop.Services.Blogs
         #region Fields
 
         private readonly CatalogSettings _catalogSettings;
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IRepository<BlogComment> _blogCommentRepository;
         private readonly IRepository<BlogPost> _blogPostRepository;
         private readonly IRepository<StoreMapping> _storeMappingRepository;
@@ -29,14 +28,12 @@ namespace Nop.Services.Blogs
         #region Ctor
 
         public BlogService(CatalogSettings catalogSettings,
-            ICacheKeyManager cacheKeyService,
             IRepository<BlogComment> blogCommentRepository,
             IRepository<BlogPost> blogPostRepository,
             IRepository<StoreMapping> storeMappingRepository,
             IStaticCacheManager staticCacheManager)
         {
             _catalogSettings = catalogSettings;
-            _cacheKeyService = cacheKeyService;
             _blogCommentRepository = blogCommentRepository;
             _blogPostRepository = blogPostRepository;
             _storeMappingRepository = storeMappingRepository;
@@ -161,7 +158,7 @@ namespace Nop.Services.Blogs
         /// <returns>Blog post tags</returns>
         public virtual IList<BlogPostTag> GetAllBlogPostTags(int storeId, int languageId, bool showHidden = false)
         {
-            var cacheKey = _cacheKeyService.PrepareKeyForDefaultCache(NopBlogsDefaults.BlogTagsModelCacheKey, languageId, storeId, showHidden);
+            var cacheKey = _staticCacheManager.PrepareKeyForDefaultCache(NopBlogsDefaults.BlogTagsModelCacheKey, languageId, storeId, showHidden);
 
             var blogPostTags = _staticCacheManager.Get(cacheKey, () =>
             {
@@ -325,7 +322,7 @@ namespace Nop.Services.Blogs
         /// <returns>Blog comment</returns>
         public virtual BlogComment GetBlogCommentById(int blogCommentId)
         {
-            return _blogCommentRepository.GetById(blogCommentId, false);
+            return _blogCommentRepository.GetById(blogCommentId, 0);
         }
 
         /// <summary>
@@ -355,7 +352,7 @@ namespace Nop.Services.Blogs
             if (isApproved.HasValue)
                 query = query.Where(comment => comment.IsApproved == isApproved.Value);
 
-            var cacheKey = _cacheKeyService.PrepareKeyForDefaultCache(NopBlogsDefaults.BlogCommentsNumberCacheKey, blogPost, storeId, isApproved);
+            var cacheKey = _staticCacheManager.PrepareKeyForDefaultCache(NopBlogsDefaults.BlogCommentsNumberCacheKey, blogPost, storeId, isApproved);
             
             return _staticCacheManager.Get(cacheKey, () => query.Count());
         }

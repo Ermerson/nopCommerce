@@ -9,7 +9,6 @@ using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Common;
 using Nop.Core.Events;
-using Nop.Core.Infrastructure;
 
 namespace Nop.Data
 {
@@ -45,10 +44,9 @@ namespace Nop.Data
         /// Get the entity entry
         /// </summary>
         /// <param name="id">Entity entry identifier</param>
-        /// <param name="cache">Whether to cache entry</param>
-        /// <param name="cacheTime">Cache time in minutes; pass null to use default value</param>
+        /// <param name="cacheTime">Cache time in minutes; pass null to use default value; pass 0 to do not cache</param>
         /// <returns>Entity entry</returns>
-        public virtual TEntity GetById(int? id, bool cache = true, int? cacheTime = null)
+        public virtual TEntity GetById(int? id, int? cacheTime = null)
         {
             if (!id.HasValue || id == 0)
                 return null;
@@ -58,7 +56,7 @@ namespace Nop.Data
                 return Entities.FirstOrDefault(e => e.Id == Convert.ToInt32(id));
             }
 
-            if (!cache)
+            if (cacheTime == 0)
                 return getEntity();
 
             //caching
@@ -66,7 +64,7 @@ namespace Nop.Data
             if (cacheTime.HasValue)
                 cacheKey.CacheTime = cacheTime.Value;
             else
-                cacheKey = EngineContext.Current.Resolve<ICacheKeyManager>().PrepareKeyForDefaultCache(cacheKey);
+                cacheKey = _staticCacheManager.PrepareKeyForDefaultCache(cacheKey);
 
             return _staticCacheManager.Get(cacheKey, getEntity);
         }
@@ -284,26 +282,19 @@ namespace Nop.Data
         {
             _dataProvider.GetTable<TEntity>().Truncate(resetIdentity);
         }
-
+        
         /// <summary>
         /// Get all entity entries
         /// </summary>
         /// <param name="func">Function to select entries</param>
-        /// <param name="cacheKeyFunc">Function to get cache key; pass null to not cache entries</param>
+        /// <param name="cacheKey">Cache key; pass null to don't cache</param>
         /// <returns>Entity entries</returns>
-        public virtual IList<TEntity> GetAll(Func<IQueryable<TEntity>, IQueryable<TEntity>> func = null,
-            Func<ICacheKeyManager, CacheKey> cacheKeyFunc = null)
+        public virtual IList<TEntity> GetAll(Func<IQueryable<TEntity>, IQueryable<TEntity>> func = null, CacheKey cacheKey = null)
         {
             var query = _dataProvider.GetTable<TEntity>() as IQueryable<TEntity>;
             if (func != null)
                 query = func.Invoke(query);
 
-            if (cacheKeyFunc == null)
-                return query.ToList();
-
-            //TODO: make getting a cache key more simple
-            //caching
-            var cacheKey = cacheKeyFunc(EngineContext.Current.Resolve<ICacheKeyManager>());
             return cacheKey == null ? query.ToList() : _staticCacheManager.Get(cacheKey, query.ToList);
         }
 

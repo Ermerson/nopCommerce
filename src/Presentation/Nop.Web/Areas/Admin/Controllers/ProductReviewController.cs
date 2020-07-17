@@ -8,7 +8,6 @@ using Nop.Core.Domain.Customers;
 using Nop.Core.Events;
 using Nop.Services.Catalog;
 using Nop.Services.Common;
-using Nop.Services.Events;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Messages;

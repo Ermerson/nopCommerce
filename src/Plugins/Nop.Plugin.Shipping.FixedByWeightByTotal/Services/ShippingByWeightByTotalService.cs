@@ -25,7 +25,6 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Services
 
         #region Fields
 
-        private readonly ICacheKeyManager _cacheKeyService;
         private readonly IRepository<ShippingByWeightByTotalRecord> _sbwtRepository;
         private readonly IStaticCacheManager _staticCacheManager;
 
@@ -33,13 +32,11 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Services
 
         #region Ctor
 
-        public ShippingByWeightByTotalService(ICacheKeyManager cacheKeyService,
-            IRepository<ShippingByWeightByTotalRecord> sbwtRepository,
+        public ShippingByWeightByTotalService(IRepository<ShippingByWeightByTotalRecord> sbwtRepository,
             IStaticCacheManager staticCacheManager)
         {
             _sbwtRepository = sbwtRepository;
             _staticCacheManager = staticCacheManager;
-            _cacheKeyService = cacheKeyService;
         }
 
         #endregion
@@ -54,7 +51,7 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Services
         /// <returns>List of the shipping by weight record</returns>
         public virtual IPagedList<ShippingByWeightByTotalRecord> GetAll(int pageIndex = 0, int pageSize = int.MaxValue)
         {
-            var key = _cacheKeyService.PrepareKeyForShortTermCache(_shippingByWeightByTotalAllKey);
+            var key = _staticCacheManager.PrepareKeyForShortTermCache(_shippingByWeightByTotalAllKey);
             var rez = _staticCacheManager.Get(key, () =>
             {
                 var query = from sbw in _sbwtRepository.Table
